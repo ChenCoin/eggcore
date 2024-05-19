@@ -1,58 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="69d2d522-2c8e-49b6-a4a7-df19cfd25a65" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.eslintrc.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/eggcore.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/audio/bgm.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/audio/boom.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/audio/bullet.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Common.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/bg.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/bullet.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/enemy.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/explosion1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/explosion10.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/explosion11.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/explosion12.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/explosion13.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/explosion14.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/explosion15.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/explosion16.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/explosion17.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/explosion18.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/explosion19.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/explosion2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/explosion3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/explosion4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/explosion5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/explosion6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/explosion7.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/explosion8.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/explosion9.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/hero.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/base/animation.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/base/pool.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/base/sprite.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/databus.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/libs/symbol.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/libs/weapp-adapter.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/main.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/npc/enemy.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/player/bullet.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/player/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/runtime/background.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/runtime/gameinfo.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/runtime/music.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project.config.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/page/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/page/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/src/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/page/src/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,6 +58,30 @@
       <option name="presentableId" value="Default" />
       <updated>1716128311520</updated>
     </task>
+    <task id="LOCAL-00001" summary="init vanilla.js">
+      <option name="closed" value="true" />
+      <created>1716128395708</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1716128395708</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="init vanilla.js" />
+    <option name="LAST_COMMIT_MESSAGE" value="init vanilla.js" />
   </component>
 </project>
