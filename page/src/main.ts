@@ -33,6 +33,32 @@ function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   render();
+
+  var mouseDown = false
+  canvas.addEventListener('mousedown', (event) => {
+    mouseDown = true
+    console.log(`start ${event.x} ${event.y}`)
+  });
+  canvas.addEventListener('mousemove', (event) => {
+    if (!mouseDown) {
+      return
+    }
+    console.log(`start ${event.x} ${event.y}`)
+  });
+  canvas.addEventListener('mouseup', (event) => {
+    mouseDown = false
+    console.log(`start ${event.x} ${event.y}`)
+  });
+
+  canvas.addEventListener('touchstart', (event) => {
+    console.log(`start ${event.touches[0].pageX} ${event.touches[0].pageY}`);
+  });
+  canvas.addEventListener('touchmove', (event) => {
+    console.log(`start ${event.touches[0].pageX} ${event.touches[0].pageY}`);
+  });
+  canvas.addEventListener('touchend', (event) => {
+    console.log(`end ${event.touches.length}`);
+  });
 }
 
 function main(): void {
