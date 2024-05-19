@@ -11,13 +11,22 @@ function render(): void {
   ctx.fillStyle = "#FFFFFF";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = "rgb(200,0,0)";
-  ctx.fillRect(10, 10, 55, 50);
+  ctx.fillStyle = "#30FFFF";
+  ctx.fillRect(100, 100, 55, 50);
 
   let position = { x: 100, y: 0 }
   let tween = new TWEEN.Tween(position)
   tween.to({ x: 200 }, 1000)
   console.log(`start ${position.x} ${position.y}`)
+
+  ctx.fillStyle = "#CDCDCD";
+  let fontSize = 12
+  ctx.font = `${fontSize}px serif`;
+  ctx.textBaseline = 'ideographic';
+  let version = "v1.0"
+  let text = ctx.measureText(version);
+  // 5像素的padding
+  ctx.fillText(version, canvas.width - text.width - 5, canvas.height)
 }
 
 function resizeCanvas() {
