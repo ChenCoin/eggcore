@@ -26,7 +26,7 @@ function render(): void {
   let version = "v1.0"
   let text = ctx.measureText(version);
   // 5像素的padding
-  ctx.fillText(version, canvas.width - text.width - 5, canvas.height)
+  ctx.fillText(version, canvas.width - text.width - 5, canvas.height - 5)
 }
 
 function resizeCanvas() {
@@ -62,6 +62,7 @@ function resizeCanvas() {
 }
 
 function main(): void {
+  console.log(`app start`)
   window.addEventListener("resize", resizeCanvas, false);
   resizeCanvas();
 }
