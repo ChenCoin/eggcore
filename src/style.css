@@ -27,7 +27,7 @@ body {
   z-index: 0;
 }
 
-#canvas {
+#game {
   position: absolute;
   z-index: 1;
 }
