@@ -2,18 +2,21 @@ import './style.css'
 import * as TWEEN from '@tweenjs/tween.js'
 import { DataBus } from "./databus.ts"
 import { UX } from "./ux.ts"
+import { BackgroundPanel } from './view/background.ts'
+import { Size } from './view/size.ts'
 
-const canvas = document.querySelector<HTMLCanvasElement>('canvas')!
-
+const canvas = document.querySelector<HTMLCanvasElement>('#game')!
+const ctx = canvas.getContext('2d')!
+const bgrCanvas = document.querySelector<HTMLCanvasElement>('#background')!
+const bgrContext = bgrCanvas.getContext('2d')!
 const databus = new DataBus()
 
-function render() {
-  console.log(`canvas ${canvas.width} ${canvas.height}`)
+function render(size: Size) {
+  console.log(`canvas ${size.width} ${size.height}`)
 
-  let ctx = canvas.getContext('2d')!
-
-  ctx.fillStyle = "#CDCDCD"
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  let background = new BackgroundPanel(bgrContext, size)
+  background.init()
+  background.draw()
 
   ctx.fillStyle = "#30FFFF"
   ctx.fillRect(100, 100, 55, 50)
@@ -22,22 +25,9 @@ function render() {
   let tween = new TWEEN.Tween(position)
   tween.to({ x: 200 }, 1000)
   console.log(`start ${position.x} ${position.y}`)
-
-  ctx.fillStyle = "#FFFFFF"
-  let fontSize = 12
-  ctx.font = `${fontSize}px serif`
-  ctx.textBaseline = 'ideographic'
-  let version = "v1.0.0"
-  let text = ctx.measureText(version)
-  // 5 pixel padding
-  ctx.fillText(version, canvas.width - text.width - 5, canvas.height - 5)
 }
 
-function resizeCanvas() {
-  canvas.width = window.innerWidth
-  canvas.height = window.innerHeight
-  render()
-
+function addEvent() {
   var mouseDown = false
   canvas.addEventListener('mousedown', (event) => {
     mouseDown = true
@@ -63,6 +53,16 @@ function resizeCanvas() {
   canvas.addEventListener('touchend', (event) => {
     console.log(`end ${event.touches.length}`)
   })
+}
+
+function resizeCanvas() {
+  let size = new Size(window.innerWidth, window.innerHeight)
+  canvas.width = size.width
+  canvas.height = size.height
+  bgrCanvas.width = size.width
+  bgrCanvas.height = size.height
+  render(size)
+  addEvent()
 }
 
 function main() {
