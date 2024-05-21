@@ -1,12 +1,12 @@
 import './style.css'
-import * as TWEEN from '@tweenjs/tween.js'
 import { DataBus } from "./databus.ts"
+import { Size } from './view/size.ts'
 import { UX } from "./ux.ts"
 import { BackgroundPanel } from './view/background.ts'
-import { Size } from './view/size.ts'
+import { GamePanel } from './view/game_panel.ts'
 
-const canvas = document.querySelector<HTMLCanvasElement>('#game')!
-const ctx = canvas.getContext('2d')!
+const gameCanvas = document.querySelector<HTMLCanvasElement>('#game')!
+const gameContext = gameCanvas.getContext('2d')!
 const bgrCanvas = document.querySelector<HTMLCanvasElement>('#background')!
 const bgrContext = bgrCanvas.getContext('2d')!
 const databus = new DataBus()
@@ -18,47 +18,42 @@ function render(size: Size) {
   background.init()
   background.draw()
 
-  ctx.fillStyle = "#30FFFF"
-  ctx.fillRect(100, 100, 55, 50)
-
-  let position = { x: 100, y: 0 }
-  let tween = new TWEEN.Tween(position)
-  tween.to({ x: 200 }, 1000)
-  console.log(`start ${position.x} ${position.y}`)
+  let gamePanel = new GamePanel(gameContext, size)
+  gamePanel.init()
 }
 
 function addEvent() {
   var mouseDown = false
-  canvas.addEventListener('mousedown', (event) => {
+  gameCanvas.addEventListener('mousedown', (event) => {
     mouseDown = true
     console.log(`start ${event.x} ${event.y}`)
   })
-  canvas.addEventListener('mousemove', (event) => {
+  gameCanvas.addEventListener('mousemove', (event) => {
     if (!mouseDown) {
       return
     }
     console.log(`start ${event.x} ${event.y}`)
   })
-  canvas.addEventListener('mouseup', (event) => {
+  gameCanvas.addEventListener('mouseup', (event) => {
     mouseDown = false
     console.log(`start ${event.x} ${event.y}`)
   })
 
-  canvas.addEventListener('touchstart', (event) => {
+  gameCanvas.addEventListener('touchstart', (event) => {
     console.log(`start ${event.touches[0].pageX} ${event.touches[0].pageY}`)
   })
-  canvas.addEventListener('touchmove', (event) => {
+  gameCanvas.addEventListener('touchmove', (event) => {
     console.log(`start ${event.touches[0].pageX} ${event.touches[0].pageY}`)
   })
-  canvas.addEventListener('touchend', (event) => {
+  gameCanvas.addEventListener('touchend', (event) => {
     console.log(`end ${event.touches.length}`)
   })
 }
 
 function resizeCanvas() {
   let size = new Size(window.innerWidth, window.innerHeight)
-  canvas.width = size.width
-  canvas.height = size.height
+  gameCanvas.width = size.width
+  gameCanvas.height = size.height
   bgrCanvas.width = size.width
   bgrCanvas.height = size.height
   render(size)
