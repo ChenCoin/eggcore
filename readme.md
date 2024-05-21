@@ -1,6 +1,6 @@
 # eggcore
 
-## 命令行
+## Command Line
 npm create vite@latest
 npm run dev
 npm run build
