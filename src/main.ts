@@ -7,16 +7,17 @@ import { GamePanel } from './view/game_panel.ts'
 
 const gameCanvas = document.querySelector<HTMLCanvasElement>('#game')!
 const gameContext = gameCanvas.getContext('2d')!
+
 const bgrCanvas = document.querySelector<HTMLCanvasElement>('#background')!
 const bgrContext = bgrCanvas.getContext('2d')!
+const background = new BackgroundPanel(bgrContext)
+
+var stabilizerTick: number = 0
 const databus = new DataBus()
 
 function render(size: Size) {
   console.log(`canvas ${size.width} ${size.height}`)
-
-  let background = new BackgroundPanel(bgrContext, size)
-  background.init()
-  background.draw()
+  background.draw(size)
 
   let gamePanel = new GamePanel(gameContext, size)
   gamePanel.init()
@@ -60,11 +61,22 @@ function resizeCanvas() {
   addEvent()
 }
 
+function stabilizer() {
+  const now = Date.now()
+  stabilizerTick = now
+  window.setTimeout(() => {
+    if (stabilizerTick == now) {
+      resizeCanvas()
+    }
+  }, 100)
+}
+
 function main() {
   console.log(`eggcore: app start`)
+  background.init()
   databus.init()
 
-  window.addEventListener("resize", resizeCanvas, false)
+  window.addEventListener("resize", stabilizer, false)
   resizeCanvas()
 
   var s = UX.col

@@ -12,7 +12,7 @@ export class GamePanel {
     }
 
     init() {
-        this.ctx.fillStyle = "#30FFFF"
+        this.ctx.fillStyle = "#000000"
         this.ctx.fillRect(100, 100, 55, 50)
 
         let position = { x: 100, y: 0 }

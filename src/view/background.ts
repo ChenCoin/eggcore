@@ -3,30 +3,27 @@ import { Size } from "./size";
 export class BackgroundPanel {
     private readonly ctx: CanvasRenderingContext2D
 
-    private readonly size: Size
+    private stars = new Array<[number, number, number]>()
 
-    private stars: Array<[number, number, number]> = new Array<[number, number, number]>()
-
-    constructor(ctx: CanvasRenderingContext2D, size: Size) {
+    constructor(ctx: CanvasRenderingContext2D) {
         this.ctx = ctx
-        this.size = size
     }
 
     init() {
         let starCount = 10 + Math.floor(Math.random() * 5);
         for (let i = 0; i < starCount; i++) {
-            let dx = Math.random() * this.size.width
-            let dy = Math.random() * this.size.height
+            let dx = Math.random()
+            let dy = Math.random()
             let r = Math.random() * 4 + 2
             this.stars.push([dx, dy, r])
         }
     }
 
-    draw() {
+    draw(size: Size) {
         let ctx = this.ctx
-        let size = this.size
         // create gradient
-        const grd = ctx.createLinearGradient(size.width / 2, 0, size.width, size.height);
+        const from = size.width / 2
+        const grd = ctx.createLinearGradient(from, 0, size.width, size.height);
         grd.addColorStop(0, "#2C2E78");
         grd.addColorStop(1, "#3C2D58");
 
@@ -54,7 +51,7 @@ export class BackgroundPanel {
         for (let i = 0; i < this.stars.length; i++) {
             let item = this.stars[i]
             ctx.beginPath()
-            ctx.arc(item[0], item[1], item[2], 0, 2 * Math.PI)
+            ctx.arc(item[0] * size.width, item[1] * size.height, item[2], 0, 2 * Math.PI)
             ctx.closePath()
             ctx.fill()
         }

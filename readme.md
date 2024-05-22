@@ -6,3 +6,4 @@ npm run dev
 npm run build
 
 npm install @tweenjs/tween.js
+npm install
