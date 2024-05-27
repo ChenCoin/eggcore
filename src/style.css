@@ -13,19 +13,22 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+html{
+  height: -webkit-fill-available;
+}
+
 body {
   margin: 0;
   display: flex;
-  place-items: center;
   min-width: 100vw;
-  min-height: 100vh;
+  min-height: -webkit-fill-available;
   overflow: hidden;
 }
 
 canvas {
   margin: 0;
   width: 100vw;
-  height: 100vh;
+  height: -webkit-fill-available;
 }
 
 #background {
