@@ -22,6 +22,12 @@ body {
   overflow: hidden;
 }
 
+canvas {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
 #background {
   position: absolute;
   z-index: 0;

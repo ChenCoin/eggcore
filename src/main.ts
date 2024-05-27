@@ -52,7 +52,8 @@ function addEvent() {
 }
 
 function resizeCanvas() {
-  let size = new Size(window.innerWidth, window.innerHeight)
+  let ratio = window.devicePixelRatio
+  let size = new Size(window.innerWidth * ratio, window.innerHeight * ratio)
   gameCanvas.width = size.width
   gameCanvas.height = size.height
   bgrCanvas.width = size.width
