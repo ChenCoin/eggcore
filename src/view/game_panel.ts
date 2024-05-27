@@ -19,5 +19,6 @@ export class GamePanel {
         let tween = new TWEEN.Tween(position)
         tween.to({ x: 200 }, 1000)
         console.log(`start ${position.x} ${position.y}`)
+        console.log(`start ${this.size}`)
     }
 }

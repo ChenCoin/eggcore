@@ -11,6 +11,6 @@ export class MenuPanel {
     }
 
     init() {
-
+        console.log(`start ${this.size} ${this.ctx}`)
     }
 }
