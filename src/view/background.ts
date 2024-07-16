@@ -22,10 +22,10 @@ export class BackgroundPanel {
     draw(size: Size) {
         let ctx = this.ctx
         // create gradient
-        const from = size.width / 2
+        const from = Math.floor(size.width / 2)
         const grd = ctx.createLinearGradient(from, 0, size.width, size.height);
-        grd.addColorStop(0, "#2C2E78");
-        grd.addColorStop(1, "#3C2D58");
+        grd.addColorStop(0, "#3C2D58");
+        grd.addColorStop(1, "#2C2E78");
 
         // fill the color
         ctx.fillStyle = grd;
@@ -57,7 +57,7 @@ export class BackgroundPanel {
         }
 
         ctx.fillStyle = "#FFFFFF"
-        let fontSize = 12
+        let fontSize = 18
         ctx.font = `${fontSize}px serif`
         ctx.textBaseline = 'ideographic'
         let version = "v1.0.0"

@@ -1,86 +1,46 @@
+// https://cloud.tencent.com/developer/article/2261633
+// npm create vite@latest
+// npm run dev
+// npm run build
+
+// npm install @tweenjs/tween.js
+// npm install pixi.js
+// npm install
 import './style.css'
-import { DataBus } from "./databus.ts"
-import { Size } from './view/size.ts'
-import { UX } from "./ux.ts"
-import { BackgroundPanel } from './view/background.ts'
-import { GamePanel } from './view/game_panel.ts'
+import * as PIXI from 'pixi.js'
+import * as Tween from '@tweenjs/tween.js'
+import { Shade } from './shade'
 
-const gameCanvas = document.querySelector<HTMLCanvasElement>('#game')!
-const gameContext = gameCanvas.getContext('2d')!
+// The application will create a renderer using WebGL, if possible,
+// with a fallback to a canvas render. It will also setup the ticker
+// and the root stage PIXI.Container
+const app = new PIXI.Application()
 
-const bgrCanvas = document.querySelector<HTMLCanvasElement>('#background')!
-const bgrContext = bgrCanvas.getContext('2d')!
-const background = new BackgroundPanel(bgrContext)
-
-var stabilizerTick: number = 0
-const databus = new DataBus()
-
-function render(size: Size) {
-  console.log(`canvas ${size.width} ${size.height}`)
-  background.draw(size)
-
-  let gamePanel = new GamePanel(gameContext, size)
-  gamePanel.init()
-}
-
-function addEvent() {
-  var mouseDown = false
-  gameCanvas.addEventListener('mousedown', (event) => {
-    mouseDown = true
-    console.log(`start ${event.x} ${event.y}`)
-  })
-  gameCanvas.addEventListener('mousemove', (event) => {
-    if (!mouseDown) {
-      return
-    }
-    console.log(`start ${event.x} ${event.y}`)
-  })
-  gameCanvas.addEventListener('mouseup', (event) => {
-    mouseDown = false
-    console.log(`start ${event.x} ${event.y}`)
-  })
-
-  gameCanvas.addEventListener('touchstart', (event) => {
-    console.log(`start ${event.touches[0].pageX} ${event.touches[0].pageY}`)
-  })
-  gameCanvas.addEventListener('touchmove', (event) => {
-    console.log(`start ${event.touches[0].pageX} ${event.touches[0].pageY}`)
-  })
-  gameCanvas.addEventListener('touchend', (event) => {
-    console.log(`end ${event.touches.length}`)
-  })
-}
-
-function resizeCanvas() {
-  let ratio = window.devicePixelRatio
-  let size = new Size(window.innerWidth * ratio, window.innerHeight * ratio)
-  gameCanvas.width = size.width
-  gameCanvas.height = size.height
-  bgrCanvas.width = size.width
-  bgrCanvas.height = size.height
-  render(size)
-  addEvent()
-}
-
-function stabilizer() {
-  const now = Date.now()
-  stabilizerTick = now
-  window.setTimeout(() => {
-    if (stabilizerTick == now) {
-      resizeCanvas()
-    }
-  }, 100)
-}
-
-function main() {
+async function main() {
   console.log(`eggcore: app start`)
-  background.init()
-  databus.init()
 
-  window.addEventListener("resize", stabilizer, false)
-  resizeCanvas()
+  // Wait for the Renderer to be available
+  await app.init({
+    backgroundColor: 0x6495ed,
+    resizeTo: window,
+    autoDensity: true,
+  })
+  app.ticker.add(() => Tween.update())
+  document.body.appendChild(app.canvas)
 
-  var s = UX.col
-  console.log(`eggcore: ${s}`)
+  if (import.meta.env.DEV) {
+    new Shade(app).init()
+  }
+
+  let rectangle = new PIXI.Graphics()
+  rectangle.rect(160, 160, 64, 64).fill()
+  app.stage.addChild(rectangle);
+
+  // let myGraph = new PIXI.Graphics();
+  // rectangle.position.set(240, 240);
+  rectangle.moveTo(240, 240).lineTo(320, 320).stroke();
+  rectangle.moveTo(320, 320).lineTo(320, 360).lineTo(340, 400).fill();
+
+  // app.stage.addChild(myGraph);
 }
 main()
