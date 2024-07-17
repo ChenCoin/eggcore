@@ -10,6 +10,7 @@ import './style.css'
 import * as PIXI from 'pixi.js'
 import * as Tween from '@tweenjs/tween.js'
 import { Shade } from './shade'
+import { Content } from './content'
 
 // The application will create a renderer using WebGL, if possible,
 // with a fallback to a canvas render. It will also setup the ticker
@@ -17,20 +18,26 @@ import { Shade } from './shade'
 const app = new PIXI.Application()
 
 async function main() {
-  console.log(`eggcore: app start`)
+  console.log(`eggcore: app start: ${window.devicePixelRatio}`)
 
   // Wait for the Renderer to be available
   await app.init({
-    backgroundColor: 0x6495ed,
-    resizeTo: window,
+    antialias: true, // 抗锯齿
     autoDensity: true,
+    backgroundColor: 0x6495ed,
+    resizeTo: window, // 大小为全屏
+    resolution: window.devicePixelRatio, // 适配缩放的分辨率
   })
   app.ticker.add(() => Tween.update())
   document.body.appendChild(app.canvas)
 
-  if (import.meta.env.DEV) {
+  let flag = false
+  if (import.meta.env.DEV && flag) {
+    document.title = 'DEMO'
     new Shade(app).init()
   }
+
+  new Content(app).init()
 
   let rectangle = new PIXI.Graphics()
   rectangle.rect(160, 160, 64, 64).fill()
@@ -42,5 +49,7 @@ async function main() {
   rectangle.moveTo(320, 320).lineTo(320, 360).lineTo(340, 400).fill();
 
   // app.stage.addChild(myGraph);
+
+
 }
 main()

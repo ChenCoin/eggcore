@@ -4,8 +4,8 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: rgba(255, 255, 255, 1);
+  background-color: #6495ED;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,30 +13,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-html{
-  height: -webkit-fill-available;
-}
-
 body {
   margin: 0;
   display: flex;
-  min-width: 100vw;
-  min-height: -webkit-fill-available;
-  overflow: hidden;
-}
-
-canvas {
-  margin: 0;
-  width: 100vw;
-  height: -webkit-fill-available;
-}
-
-#background {
-  position: absolute;
-  z-index: 0;
-}
-
-#game {
-  position: absolute;
-  z-index: 1;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
 }

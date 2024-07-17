@@ -1,11 +1,14 @@
 import * as PIXI from 'pixi.js'
+import { Falsework } from './view/falsework'
 
-export class Shade {
+export class Content {
     private shade = new PIXI.Graphics()
 
     private resizeEvent = () => { }
 
     private app: PIXI.Application
+
+    private readonly color = 0xFFFFFF
 
     constructor(app: PIXI.Application) {
         this.app = app
@@ -13,14 +16,9 @@ export class Shade {
 
     public init() {
         let renderer = this.app.renderer
-        let color = '0x000000A0'
-        this.shade.rect(0, 0, renderer.width, renderer.height).fill(color)
-        this.shade.zIndex = 10
         this.app.stage.addChild(this.shade);
-        this.resizeEvent = () => {
-            this.shade.clear()
-            this.shade.rect(0, 0, renderer.width, renderer.height).fill(color)
-        }
+        this.draw()
+        this.resizeEvent = () => this.draw()
         renderer.addListener("resize", this.resizeEvent)
     }
 
@@ -28,5 +26,13 @@ export class Shade {
         let renderer = this.app.renderer
         renderer.removeListener("resize", this.resizeEvent)
         this.shade.destroy()
+    }
+
+    private draw() {
+        this.shade.clear()
+        let size = Falsework.fromRenderer(this.app.renderer)
+        let w = size.width
+        let h = size.height
+        this.shade.roundRect(size.x, size.y, w, h, 16).fill(this.color)
     }
 }
