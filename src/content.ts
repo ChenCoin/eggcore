@@ -45,10 +45,9 @@ export class Content {
         this.container.height = size.height
 
         let dropShadowFilter = new DropShadowFilter()
-        dropShadowFilter.color = 0x000000
-        dropShadowFilter.blur = 6
-        dropShadowFilter.offsetX = 5
-        dropShadowFilter.offsetY = 5
+        dropShadowFilter.color = 0x404040
+        dropShadowFilter.alpha = 0.5
+        dropShadowFilter.antialias = 'on'
 
         // let stroke = new PIXI.Graphics()
         // stroke.filters = [dropShadowFilter]
