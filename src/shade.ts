@@ -13,7 +13,7 @@ export class Shade {
 
     public init() {
         let renderer = this.app.renderer
-        let color = '0x000000A0'
+        let color = '0x000000C0'
         this.shade.rect(0, 0, renderer.width, renderer.height).fill(color)
         this.shade.zIndex = 10
         this.app.stage.addChild(this.shade);

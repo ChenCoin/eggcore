@@ -1,12 +1,21 @@
 # eggcore
 
 ## Command Line
+```bash
+// 创建项目
 npm create vite@latest
+// dev运行
 npm run dev
+// 编译打包
 npm run build
 
-npm install @tweenjs/tween.js
+// 添加依赖库
+npm i pixi.js
+npm i pixi-filters
+npm i @tweenjs/tween.js
+// 已添加依赖的情况下，加载依赖库
 npm install
+```
 
 ## 问题与解决
 
@@ -30,3 +39,11 @@ await app.init({
 app.renderer.addListener("resize", this.resizeEvent)
 ```
 
+### 依赖
+
+阴影的依赖库：`npm i pixi-filters`
+
+### 旋转角度
+
+rotate: 0 - 2 * Pi
+angle: 0 - 360

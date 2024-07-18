@@ -10,8 +10,8 @@ export class Falsework {
     public readonly height: number;
 
     constructor(fullWidth: number, fullHeight: number) {
-        let width = fullWidth
-        let height = fullHeight - 10 // 上下5px阴影
+        let width = fullWidth - 20 // 上下5px阴影
+        let height = fullHeight - 20 // 上下5px阴影
         if (width * 16 > height * 10) {
             width = height / 16 * 10
         } else {

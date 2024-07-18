@@ -38,18 +38,6 @@ async function main() {
   }
 
   new Content(app).init()
-
-  let rectangle = new PIXI.Graphics()
-  rectangle.rect(160, 160, 64, 64).fill()
-  app.stage.addChild(rectangle);
-
-  // let myGraph = new PIXI.Graphics();
-  // rectangle.position.set(240, 240);
-  rectangle.moveTo(240, 240).lineTo(320, 320).stroke();
-  rectangle.moveTo(320, 320).lineTo(320, 360).lineTo(340, 400).fill();
-
-  // app.stage.addChild(myGraph);
-
-
 }
-main()
+
+await main()
