@@ -11,6 +11,7 @@ import * as PIXI from 'pixi.js'
 import * as Tween from '@tweenjs/tween.js'
 import { Shade } from './shade'
 import { Content } from './content'
+import * as Global from './global'
 
 // The application will create a renderer using WebGL, if possible,
 // with a fallback to a canvas render. It will also setup the ticker
@@ -31,8 +32,7 @@ async function main() {
   app.ticker.add(() => Tween.update())
   document.body.appendChild(app.canvas)
 
-  let flag = false
-  if (import.meta.env.DEV && flag) {
+  if (import.meta.env.DEV && Global.dartMode) {
     document.title = 'DEMO'
     new Shade(app).init()
   }
@@ -40,4 +40,4 @@ async function main() {
   new Content(app).init()
 }
 
-await main()
+main()

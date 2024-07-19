@@ -36,13 +36,15 @@ export class Content {
 
     private resize() {
         let size = Falsework.fromRenderer(this.app.renderer)
+        let x = size.x
+        let y = size.y
         let w = size.width
         let h = size.height
 
-        this.container.x = size.x
-        this.container.y = size.y
-        this.container.width = size.width
-        this.container.height = size.height
+        this.container.x = x + (w - 320) / 2
+        this.container.y = y + (h - 320) / 2
+        console.log(`container width: ${w}`)
+        console.log(`container height: ${h}`)
 
         let dropShadowFilter = new DropShadowFilter()
         dropShadowFilter.color = 0x404040
@@ -60,20 +62,20 @@ export class Content {
 
     private draw() {
         let rect = new PIXI.Graphics()
-        rect.roundRect(0, 0, 120, 120, 16).fill('0x909090')
+        rect.roundRect(0, 0, 320, 320, 16).fill('0x909090')
         this.container.addChild(rect)
         console.log(`container width: ${this.container.width}`)
     }
 
-    private drawOther() {
-        let rectangle = new PIXI.Graphics()
-        rectangle.rect(160, 160, 64, 64).fill()
-        this.app.stage.addChild(rectangle)
+    // private drawOther() {
+    //     let rectangle = new PIXI.Graphics()
+    //     rectangle.rect(160, 160, 64, 64).fill()
+    //     this.app.stage.addChild(rectangle)
 
-        // let myGraph = new PIXI.Graphics()
-        // rectangle.position.set(240, 240)
-        rectangle.moveTo(240, 240).lineTo(320, 320).stroke()
-        rectangle.moveTo(320, 320).lineTo(320, 360).lineTo(340, 400).fill()
-        // app.stage.addChild(myGraph)
-    }
+    //     // let myGraph = new PIXI.Graphics()
+    //     // rectangle.position.set(240, 240)
+    //     rectangle.moveTo(240, 240).lineTo(320, 320).stroke()
+    //     rectangle.moveTo(320, 320).lineTo(320, 360).lineTo(340, 400).fill()
+    //     // app.stage.addChild(myGraph)
+    // }
 }
