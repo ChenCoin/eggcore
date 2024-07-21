@@ -13,7 +13,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-body, canvas {
+body {
+  margin: 0;
+  min-width: 100vw;
+  overflow: hidden;
+}
+
+canvas {
   margin: 0;
   min-width: 100vw;
 }

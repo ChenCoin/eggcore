@@ -26,10 +26,6 @@ export class Content {
         this.resizeEvent = () => this.resize()
         let renderer = this.app.renderer
         renderer.addListener("resize", this.resizeEvent)
-
-        let rect = new PIXI.Graphics()
-        rect.rect(0, 0, 120, 120).fill('0x909090')
-        this.app.stage.addChild(rect)
     }
 
     public destroy() {
