@@ -26,6 +26,10 @@ export class Content {
         this.resizeEvent = () => this.resize()
         let renderer = this.app.renderer
         renderer.addListener("resize", this.resizeEvent)
+
+        let rect = new PIXI.Graphics()
+        rect.rect(0, 0, 120, 120).fill('0x909090')
+        this.app.stage.addChild(rect)
     }
 
     public destroy() {
@@ -61,10 +65,65 @@ export class Content {
     }
 
     private draw() {
+        let contentWidth = 320
+        let contentHeight = 320
+
         let rect = new PIXI.Graphics()
-        rect.roundRect(0, 0, 320, 320, 16).fill('0x909090')
+        rect.roundRect(0, 0, contentWidth, contentHeight, 16).fill('0x909090')
         this.container.addChild(rect)
         console.log(`container width: ${this.container.width}`)
+
+        let button = new PIXI.Graphics()
+        let btnWidth = 240
+        let btnHeight = 48
+        let padding = 24
+        let btnX = (contentWidth - btnWidth) / 2
+        let btnY = contentHeight - btnHeight - padding
+
+        let dropShadowFilter = new DropShadowFilter()
+        dropShadowFilter.color = 0x404040
+        dropShadowFilter.alpha = 0.5
+        dropShadowFilter.antialias = 'on'
+        button.filters = [dropShadowFilter]
+        button.roundRect(btnX, btnY, btnWidth, btnHeight, 24).fill('0xFFFFFF')
+        this.container.addChild(button)
+
+        button.eventMode = 'static';
+        button.on('pointerdown', (event) => {
+            console.log(`click down ${event.globalX}`)
+            button.clear()
+            button.roundRect(btnX, btnY, btnWidth, btnHeight, 24).fill('0xC0C0C0')
+        })
+        button.on('pointerup', (event) => {
+            console.log(`click up ${event.globalX}`)
+            button.clear()
+            button.roundRect(btnX, btnY, btnWidth, btnHeight, 24).fill('0xFFFFFF')
+        })
+        const style = new PIXI.TextStyle({
+            fontSize: 24,
+            align: 'center',
+            fill: '#ffffff', // 填充颜色
+            stroke: {
+                color: 0xff0000,
+                width: 2,
+            },
+            dropShadow: {
+                color: 0x444444,
+                blur: 2,
+                angle: Math.PI / 6,
+                distance: 2,
+            }
+        })
+
+        let text = new PIXI.Text({
+            anchor: 0.5,
+            text: '开始游戏',
+            style: style
+        })
+        text.x = 160;
+        text.y = btnY + btnHeight / 2
+        this.container.addChild(text)
+
     }
 
     // private drawOther() {

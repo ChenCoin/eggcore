@@ -6,6 +6,9 @@
 // npm install @tweenjs/tween.js
 // npm install pixi.js
 // npm install
+
+// see https://www.npmrc.cn/en/cnpm.html
+// npm install cnpm -g --registry=https://registry.npmmirror.com
 import './style.css'
 import * as PIXI from 'pixi.js'
 import * as Tween from '@tweenjs/tween.js'
