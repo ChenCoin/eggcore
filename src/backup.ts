@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js'
 import { Falsework } from './view/falsework'
 import { DropShadowFilter } from 'pixi-filters'
 
-export class Content {
+export class Backup {
     private container = new PIXI.Container()
 
     private shade = new PIXI.Graphics()
