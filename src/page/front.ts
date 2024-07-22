@@ -2,6 +2,7 @@ import { Scaffold } from "./scaffold"
 import { Page } from "./page"
 import * as PIXI from 'pixi.js'
 import { UX } from "../ux"
+import { Size } from "./size"
 
 export class FrontPanel implements Page {
     private app: PIXI.Application
@@ -29,41 +30,67 @@ export class FrontPanel implements Page {
         // new object
         // new groups and add object to groups
         // add groups to app stage
-        let title = this.title
+        const title = this.title
         const style = new PIXI.TextStyle({
-            fontSize: 24,
+            fontSize: 84,
             align: 'center',
-            fill: '#ffffff',
+            fill: 0xFFFFFF,
+            stroke: {
+                color: 0xFFC107,
+                width: 16,
+            },
         })
         title.anchor = 0.5
         title.style = style
+
+        const btnText = this.buttonText
+        const btnTextStyle = new PIXI.TextStyle({
+            fontSize: 24,
+            align: 'center',
+            fill: 0xFFFFFF,
+            stroke: {
+                color: 0xC0C0C0,
+                width: 1,
+            },
+        })
+        btnText.anchor = 0.5
+        btnText.style = btnTextStyle
     }
 
     build(scaffold: Scaffold): void {
         console.log(`FrontPanel build: ${scaffold}`)
-        let padding = 48
+        const padding = 48
 
-        let title = this.title
+        const title = this.title
         title.text = UX.title
         title.x = scaffold.x + scaffold.width / 2
         title.y = scaffold.y + scaffold.height / 2 - padding * 2
 
-        let x = scaffold.x + padding
-        let y = scaffold.y + scaffold.height / 2 + padding * 2
-        let width = scaffold.width - padding * 2
-        let height = 48
+        const x = scaffold.x + padding * 2
+        const y = scaffold.y + scaffold.height / 2 + padding * 2
+        const width = scaffold.width - padding * 4
+        const height = 48
 
-        let button = this.startButton
-        button.clear()
+        const btnText = this.buttonText
+        btnText.text = UX.startGame
+        btnText.x = scaffold.x + scaffold.width / 2
+        btnText.y = y + height / 2
+
+        const button = this.startButton
         button.filters = [UX.defaultShadow()]
-        button.roundRect(x, y, width, height, 24)
-        button.fill('0xFFFFFF')
 
         button.eventMode = 'static';
-        button.on('pointerdown', () => button.fill('0xC0C0C0'))
-        button.on('pointerup', () => button.fill('0xFFFFFF'))
-        button.on('pointerupoutside', () => button.fill('0xFFFFFF'))
+        button.removeAllListeners()
         button.on('pointertap', this.startGame)
+        UX.drawButton(button, new Size(x, y, width, height), 24, 0xFFC107)
+        let normalEvent = () => {
+            UX.drawButton(button, new Size(x, y, width, height), 24, 0xFFC107)
+            btnText.style.fill = 0xFFFFFF
+        }
+        UX.addButtonEvent(button, normalEvent, () => {
+            UX.drawButton(button, new Size(x, y, width, height), 24, 0xE5AC00)
+            btnText.style.fill = 0xDDDDDD
+        })
     }
 
     show(): void {

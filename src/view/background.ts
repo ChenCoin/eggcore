@@ -1,4 +1,4 @@
-import { Size } from "./size";
+import { Size } from "../page/size";
 
 export class BackgroundPanel {
     private readonly ctx: CanvasRenderingContext2D

@@ -1,4 +1,4 @@
-import { Size } from "./size";
+import { Size } from "../page/size";
 import * as TWEEN from '@tweenjs/tween.js'
 
 export class GamePanel {

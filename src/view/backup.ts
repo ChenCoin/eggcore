@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js'
-import { Scaffold } from './page/scaffold'
+import { Scaffold } from '../page/scaffold'
 import { DropShadowFilter } from 'pixi-filters'
 
 export class Backup {
@@ -106,8 +106,8 @@ export class Backup {
             align: 'center',
             fill: '#ffffff', // 填充颜色
             stroke: {
-                color: 0xff0000,
-                width: 2,
+                color: 0xFFC107,
+                width: 4,
             },
             dropShadow: {
                 color: 0x444444,

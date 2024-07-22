@@ -1,4 +1,4 @@
-import { Size } from "./size";
+import { Size } from "../page/size";
 
 export class MenuPanel {
     private readonly ctx: CanvasRenderingContext2D
