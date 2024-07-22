@@ -24,9 +24,11 @@ export class ContentPanel implements Page {
     }
 
     build(scaffold: Scaffold): void {
+        this.group.x = scaffold.x
+        this.group.y = scaffold.y
         const padding = 48
-        const x = scaffold.x + padding * 2
-        const y = scaffold.y
+        const x = padding * 2
+        const y = 64
         const width = scaffold.width - padding * 4
         const height = 48
 
@@ -42,6 +44,11 @@ export class ContentPanel implements Page {
         UX.addButtonEvent(button, normalEvent, () => {
             UX.drawButton(button, new Size(x, y, width, height), 24, 0xE5AC00)
         })
+    }
+
+    update(x: number, y: number): void {
+        this.group.x = x
+        this.group.y = y
     }
 
     show(): void {

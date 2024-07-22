@@ -5,6 +5,8 @@ export interface Page {
 
     build(scaffold: Scaffold): void
 
+    update(x: number, y: number): void
+
     show(): void
 
     hide(): void

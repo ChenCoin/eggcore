@@ -24,7 +24,7 @@ export class Index {
 
     private lastPage: Page = new NullPage()
 
-    private lastScaffold = new Scaffold(0, 0)
+    private scaffoldCache = new Scaffold(0, 0)
 
     public async start() {
         console.log(`eggcore: app start: ${window.devicePixelRatio}`)
@@ -46,16 +46,10 @@ export class Index {
         }
         // 右下角版本信息
         this.addVersionInfo()
-
-        this.lastScaffold = Scaffold.fromRenderer(this.app.renderer)
-        this.onUpdate(this.lastScaffold)
-        this.app.renderer.addListener("resize", () => {
-            let newScaffold = Scaffold.fromRenderer(this.app.renderer)
-            if (newScaffold.notEquals(this.lastScaffold)) {
-                this.lastScaffold = newScaffold
-                this.onUpdate(newScaffold)
-            }
-        })
+        this.onUpdate(Scaffold.fromRenderer(this.app.renderer))
+        this.lastPage = this.showOnStatus()
+        let renderer = app.renderer
+        renderer.addListener("resize", () => this.onUpdate(Scaffold.fromRenderer(renderer)))
     }
 
     private showOnStatus(): Page {
@@ -68,12 +62,16 @@ export class Index {
         return this.frontPanel
     }
 
-    private onUpdate(size: Scaffold) {
-        this.lastPage.destory()
-        let newPage = this.showOnStatus()
-        newPage.create()
-        newPage.build(size)
-        this.lastPage = newPage
+    private onUpdate(newScaffold: Scaffold) {
+        let page = this.showOnStatus()
+        if (newScaffold.sameSize(this.scaffoldCache)) {
+            page.update(newScaffold.x, newScaffold.y)
+        } else {
+            page.destory()
+            page.create()
+            page.build(newScaffold)
+        }
+        this.scaffoldCache = newScaffold
 
         // 右下角版本信息
         const padding = 4
@@ -81,10 +79,18 @@ export class Index {
         this.versionText.y = this.app.renderer.height - padding
     }
 
+    private onPageChanged() {
+        this.lastPage.destory()
+        let newPage = this.showOnStatus()
+        newPage.create()
+        newPage.build(this.scaffoldCache)
+        this.lastPage = newPage
+    }
+
     private createStatusFn(statue: number): () => void {
         return () => {
             this.statue = statue
-            this.onUpdate(this.lastScaffold)
+            this.onPageChanged()
         }
     }
 
@@ -108,6 +114,7 @@ export class Index {
 class NullPage implements Page {
     create(): void { }
     build(_: Scaffold): void { }
+    update(_x: number, _y: number): void { }
     show(): void { }
     hide(): void { }
     destory(): void { }

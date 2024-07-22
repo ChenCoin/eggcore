@@ -58,22 +58,23 @@ export class FrontPanel implements Page {
     }
 
     build(scaffold: Scaffold): void {
-        console.log(`FrontPanel build: ${scaffold}`)
+        this.group.x = scaffold.x
+        this.group.y = scaffold.y
         const padding = 48
 
         const title = this.title
         title.text = UX.title
-        title.x = scaffold.x + scaffold.width / 2
-        title.y = scaffold.y + scaffold.height / 2 - padding * 2
+        title.x = scaffold.width / 2
+        title.y = scaffold.height / 2 - padding * 2
 
-        const x = scaffold.x + padding * 2
-        const y = scaffold.y + scaffold.height / 2 + padding * 2
+        const x = padding * 2
+        const y = scaffold.height / 2 + padding * 2
         const width = scaffold.width - padding * 4
         const height = 48
 
         const btnText = this.buttonText
         btnText.text = UX.startGame
-        btnText.x = scaffold.x + scaffold.width / 2
+        btnText.x = scaffold.width / 2
         btnText.y = y + height / 2
 
         const button = this.startButton
@@ -90,6 +91,11 @@ export class FrontPanel implements Page {
             UX.drawButton(button, new Size(x, y, width, height), 24, 0xE5AC00)
             btnText.style.fill = 0xDDDDDD
         })
+    }
+
+    update(x: number, y: number): void {
+        this.group.x = x
+        this.group.y = y
     }
 
     show(): void {

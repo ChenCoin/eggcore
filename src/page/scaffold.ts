@@ -35,4 +35,8 @@ export class Scaffold {
     public notEquals(other: Scaffold) {
         return !this.equals(other)
     }
+
+    public sameSize(other: Scaffold) {
+        return this.width == other.width && this.height == other.height
+    }
 }
