@@ -78,12 +78,11 @@ export class FrontPanel implements Page {
 
         const button = this.startButton
         button.filters = [UX.defaultShadow()]
-
         button.eventMode = 'static';
         button.removeAllListeners()
         button.on('pointertap', this.startGame)
         UX.drawButton(button, new Size(x, y, width, height), 24, 0xFFC107)
-        let normalEvent = () => {
+        const normalEvent = () => {
             UX.drawButton(button, new Size(x, y, width, height), 24, 0xFFC107)
             btnText.style.fill = 0xFFFFFF
         }

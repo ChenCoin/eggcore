@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js'
+import { Renderer } from "pixi.js";
 
 export class Scaffold {
     public readonly x: number;
@@ -23,7 +23,7 @@ export class Scaffold {
         this.height = height
     }
 
-    static fromRenderer(renderer: PIXI.Renderer): Scaffold {
+    static fromRenderer(renderer: Renderer): Scaffold {
         return new Scaffold(renderer.width, renderer.height)
     }
 

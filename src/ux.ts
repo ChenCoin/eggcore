@@ -8,6 +8,8 @@ export class UX {
 
     public static readonly col = 10
 
+    public static readonly version = 'version: 1.0.0'
+
     public static readonly title = '星星王国'
 
     public static readonly startGame = '开始游戏'
