@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js'
-import { Falsework } from './view/falsework'
+import { Scaffold } from './page/scaffold'
 import { DropShadowFilter } from 'pixi-filters'
 
 export class Backup {
@@ -35,7 +35,7 @@ export class Backup {
     }
 
     private resize() {
-        let size = Falsework.fromRenderer(this.app.renderer)
+        let size = Scaffold.fromRenderer(this.app.renderer)
         let x = size.x
         let y = size.y
         let w = size.width

@@ -1,1 +1,1 @@
-export const dartMode = false
+export const dartMode = true

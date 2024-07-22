@@ -9,38 +9,7 @@
 
 // see https://www.npmrc.cn/en/cnpm.html
 // npm install cnpm -g --registry=https://registry.npmmirror.com
+import { Index } from './page'
 import './style.css'
-import * as PIXI from 'pixi.js'
-import * as Tween from '@tweenjs/tween.js'
-import { Shade } from './shade'
-import { Content } from './content'
-import * as Global from './global'
 
-// The application will create a renderer using WebGL, if possible,
-// with a fallback to a canvas render. It will also setup the ticker
-// and the root stage PIXI.Container
-const app = new PIXI.Application()
-
-async function main() {
-  console.log(`eggcore: app start: ${window.devicePixelRatio}`)
-
-  // Wait for the Renderer to be available
-  await app.init({
-    antialias: true, // 抗锯齿
-    autoDensity: true,
-    backgroundColor: 0x6495ed,
-    resizeTo: window, // 大小为全屏
-    resolution: window.devicePixelRatio, // 适配缩放的分辨率
-  })
-  app.ticker.add(() => Tween.update())
-  document.body.appendChild(app.canvas)
-
-  if (import.meta.env.DEV && Global.dartMode) {
-    document.title = 'DEMO'
-    new Shade(app).init()
-  }
-
-  new Content(app).init()
-}
-
-main()
+new Index().start()

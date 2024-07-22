@@ -47,3 +47,27 @@ app.renderer.addListener("resize", this.resizeEvent)
 
 rotate: 0 - 2 * Pi
 angle: 0 - 360
+
+
+## 点击事件
+
+```typescript
+// 配置事件模式
+button.eventMode = 'static';
+button.on('pointerdown', () => {
+    // 手指或鼠标按下时的效果
+})
+button.on('pointerup', () => {
+    // 手指或鼠标离开时的效果
+})
+button.on('pointerupoutside', () => {
+    // 手指或鼠标离开时的效果，事件取消
+})
+button.on('pointertap', (event) => {
+    // 点击事件的逻辑
+})
+```
+
+## 划动事件
+
+## 事件分发

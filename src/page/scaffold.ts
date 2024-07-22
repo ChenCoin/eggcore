@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js'
 
-export class Falsework {
+export class Scaffold {
     public readonly x: number;
 
     public readonly y: number;
@@ -23,7 +23,16 @@ export class Falsework {
         this.height = height
     }
 
-    static fromRenderer(renderer: PIXI.Renderer): Falsework {
-        return new Falsework(renderer.width, renderer.height)
+    static fromRenderer(renderer: PIXI.Renderer): Scaffold {
+        return new Scaffold(renderer.width, renderer.height)
+    }
+
+    public equals(other: Scaffold) {
+        return this.x == other.x && this.y == other.y &&
+            this.width == other.width && this.height == other.height
+    }
+
+    public notEquals(other: Scaffold) {
+        return !this.equals(other)
     }
 }
