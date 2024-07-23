@@ -1,26 +1,30 @@
 import * as PIXI from 'pixi.js'
 import * as Tween from '@tweenjs/tween.js'
 import { ContentPanel } from './content'
+import { Databus } from '../databus'
 import { FrontPanel } from './front'
 import { Page } from './page'
 import { Scaffold } from './scaffold'
 import { Shade } from '../shade'
+import { Story } from './story'
 import { UX } from '../ux'
 import { dartMode } from '../global'
 
-export class Index {
+export class Index implements Story {
     // The application will create a renderer using WebGL, if possible,
     // with a fallback to a canvas render. It will also setup the ticker
     // and the root stage PIXI.Container
     private readonly app = new PIXI.Application()
 
+    private readonly databus = new Databus()
+
     private readonly versionText = new PIXI.Text()
 
-    private readonly frontPanel = new FrontPanel(this.app, this.createStatusFn(1))
+    private readonly frontPanel = new FrontPanel(this)
 
-    private readonly contentPanel = new ContentPanel(this.app, this.createStatusFn(0))
+    private readonly contentPanel = new ContentPanel(this)
 
-    private statue: number = 0
+    private pageIndex: number = 0
 
     private lastPage: Page = new NullPage()
 
@@ -52,11 +56,28 @@ export class Index {
         renderer.addListener("resize", () => this.onUpdate(Scaffold.fromRenderer(renderer)))
     }
 
+    public ofApp(): PIXI.Application {
+        return this.app
+    }
+
+    public ofData(): Databus {
+        return this.databus
+    }
+
+    public onPageChanged(page: number) {
+        this.pageIndex = page
+        this.lastPage.destory()
+        let newPage = this.showOnStatus()
+        newPage.create()
+        newPage.build(this.scaffoldCache)
+        this.lastPage = newPage
+    }
+
     private showOnStatus(): Page {
-        if (this.statue == 0) {
+        if (this.pageIndex == 0) {
             return this.frontPanel
         }
-        if (this.statue == 1) {
+        if (this.pageIndex == 1) {
             return this.contentPanel
         }
         return this.frontPanel
@@ -77,21 +98,6 @@ export class Index {
         const padding = 4
         this.versionText.x = this.app.renderer.width - padding * 4
         this.versionText.y = this.app.renderer.height - padding
-    }
-
-    private onPageChanged() {
-        this.lastPage.destory()
-        let newPage = this.showOnStatus()
-        newPage.create()
-        newPage.build(this.scaffoldCache)
-        this.lastPage = newPage
-    }
-
-    private createStatusFn(statue: number): () => void {
-        return () => {
-            this.statue = statue
-            this.onPageChanged()
-        }
     }
 
     private addVersionInfo() {

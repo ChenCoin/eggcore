@@ -3,11 +3,12 @@ import { Page } from "./page"
 import * as PIXI from 'pixi.js'
 import { UX } from "../ux"
 import { Size } from "./size"
+import { Story } from "./story"
 
 export class FrontPanel implements Page {
     private app: PIXI.Application
 
-    private startGame: () => void
+    private story: Story
 
     private group = new PIXI.Container()
 
@@ -17,9 +18,9 @@ export class FrontPanel implements Page {
 
     private buttonText = new PIXI.Text()
 
-    constructor(app: PIXI.Application, startGame: () => void) {
-        this.app = app
-        this.startGame = startGame
+    constructor(story: Story) {
+        this.story = story
+        this.app = story.ofApp()
     }
 
     create(): void {
@@ -81,7 +82,7 @@ export class FrontPanel implements Page {
         button.filters = [UX.defaultShadow()]
         button.eventMode = 'static';
         button.removeAllListeners()
-        button.on('pointertap', this.startGame)
+        button.on('pointertap', () => this.story.onPageChanged(1))
         UX.drawButton(button, new Size(x, y, width, height), 24, 0xFFC107)
         const normalEvent = () => {
             UX.drawButton(button, new Size(x, y, width, height), 24, 0xFFC107)

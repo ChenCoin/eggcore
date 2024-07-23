@@ -1,4 +1,4 @@
-export class DataBus {
+export class Databus {
     init() { }
 
     start() { }
