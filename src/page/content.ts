@@ -67,9 +67,11 @@ export class ContentPanel implements Page {
     }
 
     show(): void {
+        this.group.visible = true
     }
 
     hide(): void {
+        this.group.visible = false
     }
 
     destory(): void {
@@ -84,7 +86,7 @@ export class ContentPanel implements Page {
         let chessboard = this.chessboard
         chessboard.strokeStyle = {
             color: 0xFFFFFF,
-            width: 2,
+            width: 1,
         }
 
         let gridY = 180

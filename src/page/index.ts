@@ -8,7 +8,7 @@ import { Scaffold } from './scaffold'
 import { Shade } from '../shade'
 import { Story } from './story'
 import { UX } from '../ux'
-import { dartMode } from '../global'
+import { dartMode, defaultIndex } from '../global'
 
 export class Index implements Story {
     // The application will create a renderer using WebGL, if possible,
@@ -24,7 +24,7 @@ export class Index implements Story {
 
     private readonly contentPanel = new ContentPanel(this)
 
-    private pageIndex: number = 0
+    private pageIndex: number = defaultIndex
 
     private lastPage: Page = new NullPage()
 
@@ -43,6 +43,10 @@ export class Index implements Story {
         })
         app.ticker.add(() => Tween.update())
         document.body.appendChild(app.canvas)
+
+        // load the fonts. todo zip the font to woff2
+        await PIXI.Assets.load('font/pig.otf')
+        await PIXI.Assets.load('font/HarmonyOS_Sans_SC_Regular.ttf')
 
         if (import.meta.env.DEV && dartMode) {
             document.title = 'DEMO'
@@ -102,9 +106,10 @@ export class Index implements Story {
 
     private addVersionInfo() {
         const style = new PIXI.TextStyle({
-            fontSize: 16,
             align: 'center',
             fill: '#ffffff',
+            fontFamily:'HarmonyOS_Sans_SC_Regular',
+            fontSize: 16,
             stroke: {
                 color: 0xCCCCCC,
                 width: 1,

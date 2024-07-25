@@ -33,9 +33,10 @@ export class FrontPanel implements Page {
         // add groups to app stage
         const title = this.title
         const style = new PIXI.TextStyle({
-            fontSize: 84,
             align: 'center',
             fill: 0xFFFFFF,
+            fontFamily:'pig',
+            fontSize: 84,
             stroke: {
                 color: 0xFFC107,
                 width: 16,
@@ -46,9 +47,10 @@ export class FrontPanel implements Page {
 
         const btnText = this.buttonText
         const btnTextStyle = new PIXI.TextStyle({
-            fontSize: 24,
             align: 'center',
             fill: 0xFFFFFF,
+            fontFamily:'HarmonyOS_Sans_SC_Regular',
+            fontSize: 24,
             stroke: {
                 color: 0xC0C0C0,
                 width: 1,
