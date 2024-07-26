@@ -48,6 +48,9 @@ export class Index implements Story {
         await PIXI.Assets.load('font/pig.otf')
         await PIXI.Assets.load('font/HarmonyOS_Sans_SC_Regular.ttf')
 
+        // init game data
+        this.databus.init()
+
         if (import.meta.env.DEV && dartMode) {
             document.title = 'DEMO'
             new Shade(app).init()
@@ -75,6 +78,16 @@ export class Index implements Story {
         newPage.create()
         newPage.build(this.scaffoldCache)
         this.lastPage = newPage
+    }
+
+    public onGameStart(): void {
+        this.databus.start()
+        this.onPageChanged(1)
+    }
+
+    public onGameEnd(): void {
+        this.databus.end()
+        this.onPageChanged(0)
     }
 
     private showOnStatus(): Page {
@@ -108,7 +121,7 @@ export class Index implements Story {
         const style = new PIXI.TextStyle({
             align: 'center',
             fill: '#ffffff',
-            fontFamily:'HarmonyOS_Sans_SC_Regular',
+            fontFamily: 'HarmonyOS_Sans_SC_Regular',
             fontSize: 16,
             stroke: {
                 color: 0xCCCCCC,

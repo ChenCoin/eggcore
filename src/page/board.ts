@@ -86,4 +86,22 @@ export class Board implements Widget {
         path.bezierCurveTo(left + gap, btm, left, btm - gap, left, btm - radius);
         path.closePath();
     }
+
+    // color map
+    _colorMap(number: number): [number, number] {
+        switch (number) {
+            case 1:
+                return [0xFFEC7062, 0xFFE74C3C] // red
+            case 2:
+                return [0xFF5CADE2, 0xFF5599C7] // blue
+            case 3:
+                return [0xFFF4CF40, 0xFFF5B041] // yellow
+            case 4:
+                return [0xFFAF7AC4, 0xFFA569BD] // purple
+            case 5:
+                return [0xFF57D68C, 0xFF53BE80] // green
+            default:
+                return [0, 0]
+        }
+    }
 }

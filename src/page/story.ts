@@ -7,4 +7,8 @@ export interface Story {
     ofData(): Databus
 
     onPageChanged(page: number): void
+
+    onGameStart(): void
+
+    onGameEnd(): void
 }

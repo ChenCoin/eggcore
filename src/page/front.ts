@@ -84,7 +84,7 @@ export class FrontPanel implements Page {
         button.filters = [UX.defaultShadow()]
         button.eventMode = 'static';
         button.removeAllListeners()
-        button.on('pointertap', () => this.story.onPageChanged(1))
+        button.on('pointertap', () => this.story.onGameStart())
         UX.drawButton(button, new Size(x, y, width, height), 24, 0xFFC107)
         const normalEvent = () => {
             UX.drawButton(button, new Size(x, y, width, height), 24, 0xFFC107)
