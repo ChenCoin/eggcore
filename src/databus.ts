@@ -52,7 +52,9 @@ export class Databus {
             return 0
         }
         // 消除相同颜色的方块
+        console.log(`total: ${sameColorGrids.length}`)
         sameColorGrids.forEach(pos => {
+            console.log(`grid ${pos[0]} ${pos[1]}`)
             this.allGrid[pos[0]][pos[1]].clear()
         })
         // 方块消除后，上方的方块下落
@@ -92,6 +94,7 @@ export class Databus {
     private findSameColorGrids(theGrid: GridPoint): Array<[number, number]> {
         let sameColorGrids = new Array<[number, number]>()
         let pivot = theGrid.getPivot()
+        console.log(`node ${pivot[1]} ${pivot[0]}`)
         sameColorGrids.push([pivot[1], pivot[0]])
         let notInclude = (pos: [number, number]): boolean => {
             for (let i = 0; i < sameColorGrids.length; i++) {
@@ -180,8 +183,6 @@ export class GridPoint {
 
     public clear() {
         this.value = 0
-        this.dx = 0
-        this.dy = 0
     }
 
     public equals(other: GridPoint) {

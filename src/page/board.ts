@@ -33,24 +33,38 @@ export class Board implements Widget {
     }
 
     create(): void {
-        this.group.addChild(this.allStar)
+        this.tapArea.zIndex = -1
         this.group.addChild(this.tapArea)
+        this.group.addChild(this.allStar)
     }
 
     build(scaffold: Scaffold): void {
         this.scaffoldCache = scaffold
         this.cover = new Cover(scaffold.width, scaffold.height)
-        this.draw()
         // add listener
-        this.tapArea.clear()
+        let tapArea = this.tapArea
+        const padding = this.cover.padding
         const cw = this.cover.contentWidth
-        this.tapArea.rect(this.cover.padding, this.cover.gridY, cw, cw)
-        this.tapArea.on('pointertap', (event) => {
-            const x = event.clientX
-            const y = event.clientY
+        const fillet = this.cover.fillet
+        const dx = padding
+        const dy = this.cover.gridY + padding
+        tapArea.clear()
+        tapArea.filletRect(dx, dy, cw, cw, fillet)
+        tapArea.fill(0xFFFFFF)
+
+        tapArea.eventMode = 'static';
+        tapArea.removeAllListeners()
+        const gridSize = (scaffold.width - padding * 2) / UX.col
+        tapArea.on('pointertap', (event) => {
+            const x = Math.floor((event.globalX - dx - this.group.x) / gridSize)
+            const y = Math.floor((event.globalY - dy - this.group.y) / gridSize)
             console.log(`tap event: ${x} ${y}`)
-            this.story.ofData().onGridTap(x, y)
+            const result = this.story.ofData().onGridTap(x, y)
+            if (result > 1) {
+                this.draw()
+            }
         })
+        this.draw()
     }
 
     draw() {
@@ -73,25 +87,27 @@ export class Board implements Widget {
         const extraElse = Math.ceil(padding + strokeHalf + gridSize / 2)
         let allGrid = this.story.ofData().ofGrids()
         let path = new PIXI.GraphicsPath()
-        let filter = UX.defaultShadow()
+        this.allStar.clear()
         for (let i = 0; i < UX.row; i++) {
             for (let j = 0; j < UX.col; j++) {
-                let item = allGrid[i][j]
-                let color: [number, number] = this.colorMap[item.ofColor()]
+                let itemIndex = allGrid[i][j].ofColor()
+                if (itemIndex == 0) {
+                    continue
+                }
+                let color: [number, number] = this.colorMap[itemIndex]
 
                 const x = extra + j * extraSize
                 const y = extra + i * extraSize + gridY
                 // rect: x, y, starSize, starSize
                 this.allStar.filters = []
                 this.allStar.filletRect(x, y, starSize, starSize, fillet)
-                this.allStar.fill(color[0])
+                this.allStar.fill(color[1])
 
                 const cx = extraElse + j * extraSize
                 const cy = extraElse + i * extraSize + gridY + 1
                 this.drawStar(path, cx, cy, outerR, innerR, 0)
                 this.allStar.path(path)
-                this.allStar.filters = [filter]
-                this.allStar.fill(color[1])
+                this.allStar.fill(color[0])
             }
         }
         // add listener of tap
@@ -100,6 +116,9 @@ export class Board implements Widget {
     }
 
     destory(): void {
+        this.tapArea.clear()
+        this.allStar.clear()
+        this.group.removeChild(this.tapArea)
         this.group.removeChild(this.allStar)
     }
 

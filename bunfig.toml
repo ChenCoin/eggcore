@@ -1,0 +1,3 @@
+[install]
+# 将默认注册表设置为字符串
+registry = "https://registry.npmmirror.com"

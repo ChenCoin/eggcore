@@ -82,7 +82,7 @@ export class ContentPanel implements Page {
     private drawChessBoard(width: number, height: number) {
         let chessboard = this.chessboard
         chessboard.strokeStyle = {
-            color: 0xFFFFFF,
+            color: 0xEEEEEE,
             width: 1,
         }
 
@@ -94,14 +94,14 @@ export class ContentPanel implements Page {
         const strokeHalf = cover.strokeHalf
 
         chessboard.clear()
-        for (let i = 0; i <= UX.row; i++) {
+        for (let i = 1; i < UX.row; i++) {
             const y = gridY + padding + strokeHalf + i * (gridSize + strokeSize)
             const startX = padding + strokeHalf
             chessboard.moveTo(startX, y)
             const endX = width - padding - strokeHalf
             chessboard.lineTo(endX, y)
         }
-        for (let i = 0; i <= UX.col; i++) {
+        for (let i = 1; i < UX.col; i++) {
             const x = padding + strokeHalf + i * (gridSize + strokeSize)
             const startY = gridY + padding + strokeHalf
             chessboard.moveTo(x, startY)

@@ -9,11 +9,11 @@ export class Cover {
     readonly contentWidth
     readonly gridSize
     readonly strokeHalf
-    readonly starPadding = 3
+    readonly starPadding = 4
     readonly starSize
     readonly outerR
     readonly innerR
-    readonly fillet = 4
+    readonly fillet = 12
 
     constructor(width: number, height: number) {
         this.width = width
@@ -26,7 +26,7 @@ export class Cover {
         this.strokeHalf = Math.ceil(this.strokeSize / 2)
 
         this.starSize = Math.ceil(this.gridSize - this.starPadding * 2)
-        this.outerR = Math.ceil(this.starSize / 2)
-        this.innerR = Math.ceil(this.outerR * 3 / 5)
+        this.outerR = Math.ceil(this.starSize / 2 - 2)
+        this.innerR = Math.ceil(this.outerR / 2 + 1)
     }
 }
