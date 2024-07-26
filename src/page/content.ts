@@ -1,18 +1,18 @@
 import * as PIXI from 'pixi.js'
 import { Board } from './board';
-import { Databus } from '../databus';
 import { Page } from "./page";
 import { Scaffold } from "./scaffold";
 import { Size } from './size';
 import { Story } from './story';
 import { UX } from '../ux';
+import { Cover } from './cover';
 
 export class ContentPanel implements Page {
     private story: Story
 
     private app: PIXI.Application
 
-    private databus: Databus
+    private board: Board
 
     private group = new PIXI.Container()
 
@@ -20,19 +20,16 @@ export class ContentPanel implements Page {
 
     private chessboard = new PIXI.Graphics()
 
-    private board = new Board(this.group)
-
     constructor(story: Story) {
         this.story = story
         this.app = story.ofApp()
-        this.databus = story.ofData()
+        this.board = new Board(story, this.group)
     }
 
     create(): void {
         this.group.addChild(this.endButton)
         this.group.addChild(this.chessboard)
         this.app.stage.addChild(this.group)
-        this.databus.init() // remove it
         this.board.create()
     }
 
@@ -57,7 +54,7 @@ export class ContentPanel implements Page {
         UX.addButtonEvent(button, normalEvent, () => {
             UX.drawButton(button, new Size(x, y, width, height), 24, 0xE5AC00)
         })
-        this.drawChessBoard(scaffold.width)
+        this.drawChessBoard(scaffold.width, scaffold.height)
         this.board.build(scaffold)
     }
 
@@ -82,23 +79,21 @@ export class ContentPanel implements Page {
         this.app.stage.removeChild(this.group)
     }
 
-    private drawChessBoard(width: number) {
+    private drawChessBoard(width: number, height: number) {
         let chessboard = this.chessboard
         chessboard.strokeStyle = {
             color: 0xFFFFFF,
             width: 1,
         }
 
-        let gridY = 180
-        let strokeSize = 1
-        let padding = 4
-        let contentWidth = width - padding * 2
-        let gridSize = (contentWidth - strokeSize * (UX.col + 1)) / UX.col
-        // let starPadding = 2
-        // let starSize = gridSize - starPadding * 2
+        const cover = new Cover(width, height)
+        const gridY = cover.gridY
+        const strokeSize = cover.strokeSize
+        const padding = cover.padding
+        const gridSize = cover.gridSize
+        const strokeHalf = cover.strokeHalf
 
         chessboard.clear()
-        const strokeHalf = Math.ceil(strokeSize / 2)
         for (let i = 0; i <= UX.row; i++) {
             const y = gridY + padding + strokeHalf + i * (gridSize + strokeSize)
             const startX = padding + strokeHalf

@@ -31,6 +31,10 @@ export class Databus {
         this.status = 3
     }
 
+    public ofGrids(): Array<Array<GridPoint>> {
+        return this.allGrid
+    }
+
     public isGaming() {
         return this.status == 1
     }
@@ -159,6 +163,10 @@ export class GridPoint {
 
     public randomInit() {
         this.value = Math.ceil(Math.random() * 5)
+    }
+
+    public ofColor(): number {
+        return this.value
     }
 
     public getPivot(): [number, number] {

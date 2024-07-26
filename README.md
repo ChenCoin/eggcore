@@ -15,6 +15,20 @@ npm i pixi-filters
 npm i @tweenjs/tween.js
 // 已添加依赖的情况下，加载依赖库
 npm install
+
+https://bun.sh/guides/ecosystem/vite
+
+curl -fsSL https://bun.sh/install | bash
+
+bun create vite my-app
+cd my-app
+bun install
+
+bunx --bun vite
+
+// fix error of Cannot find module 'bun:test'
+bun add bun-types
+bun init
 ```
 
 ## 问题与解决

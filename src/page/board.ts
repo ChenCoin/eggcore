@@ -1,49 +1,99 @@
 import * as PIXI from 'pixi.js'
 import { Widget } from "./page";
 import { Scaffold } from "./scaffold";
+import { UX } from '../ux';
+import { Story } from './story';
+import { Cover } from './cover';
 
 export class Board implements Widget {
+    private story: Story
+
     private group: PIXI.Container
 
     private allStar = new PIXI.Graphics()
 
+    private tapArea = new PIXI.Graphics()
+
     private scaffoldCache = new Scaffold(0, 0)
 
-    constructor(group: PIXI.Container) {
+    private cover = new Cover(0, 0)
+
+    private readonly colorMap: Array<[number, number]> = [
+        [0xFFFFFF, 0x000000], // white
+        [0xEC7062, 0xE74C3C], // red
+        [0x5CADE2, 0x5599C7], // blue
+        [0xF4CF40, 0xF5B041], // yellow
+        [0xAF7AC4, 0xA569BD], // purple
+        [0x57D68C, 0x53BE80], // green
+    ]
+
+    constructor(story: Story, group: PIXI.Container) {
+        this.story = story
         this.group = group
     }
 
     create(): void {
         this.group.addChild(this.allStar)
+        this.group.addChild(this.tapArea)
     }
 
     build(scaffold: Scaffold): void {
         this.scaffoldCache = scaffold
+        this.cover = new Cover(scaffold.width, scaffold.height)
         this.draw()
         // add listener
+        this.tapArea.clear()
+        const cw = this.cover.contentWidth
+        this.tapArea.rect(this.cover.padding, this.cover.gridY, cw, cw)
+        this.tapArea.on('pointertap', (event) => {
+            const x = event.clientX
+            const y = event.clientY
+            console.log(`tap event: ${x} ${y}`)
+            this.story.ofData().onGridTap(x, y)
+        })
     }
 
     draw() {
-        let path = new PIXI.GraphicsPath()
-        this.drawStar(path, 30 + 20, 30, 20, 10, 0)
-        // path.clear()
-        // path.moveTo(30 + 20, 30)
-        // path.star(30 + 20, 30, 5, 20)
-        // path.closePath()
-        this.allStar.path(path)
-
-        this.allStar.roundRect(30, 60, 75, 75, 10)
-        this.allStar.filletRect(30, 140, 75, 75, 10)
-
-        let path2 = new PIXI.GraphicsPath()
-        this.drawSmoothRoundRect(path2, 30, 220, 75, 75, 10)
-        this.allStar.path(path2)
-
-        this.allStar.fill(0xC0C0C0)
-        // path.clear()
-        console.log(`draw star`)
+        console.log(`draw star, scaffold: ${this.scaffoldCache}`)
         // draw all star
+        const gridY = this.cover.gridY
+        const strokeSize = this.cover.strokeSize
+        const padding = this.cover.padding
+        const gridSize = this.cover.gridSize
+        const strokeHalf = this.cover.strokeHalf
 
+        const starPadding = this.cover.starPadding
+        const starSize = this.cover.starSize
+        const outerR = this.cover.outerR
+        const innerR = this.cover.innerR
+        const fillet = this.cover.fillet
+
+        const extraSize = gridSize + strokeSize
+        const extra = padding + strokeHalf + starPadding
+        const extraElse = Math.ceil(padding + strokeHalf + gridSize / 2)
+        let allGrid = this.story.ofData().ofGrids()
+        let path = new PIXI.GraphicsPath()
+        let filter = UX.defaultShadow()
+        for (let i = 0; i < UX.row; i++) {
+            for (let j = 0; j < UX.col; j++) {
+                let item = allGrid[i][j]
+                let color: [number, number] = this.colorMap[item.ofColor()]
+
+                const x = extra + j * extraSize
+                const y = extra + i * extraSize + gridY
+                // rect: x, y, starSize, starSize
+                this.allStar.filters = []
+                this.allStar.filletRect(x, y, starSize, starSize, fillet)
+                this.allStar.fill(color[0])
+
+                const cx = extraElse + j * extraSize
+                const cy = extraElse + i * extraSize + gridY + 1
+                this.drawStar(path, cx, cy, outerR, innerR, 0)
+                this.allStar.path(path)
+                this.allStar.filters = [filter]
+                this.allStar.fill(color[1])
+            }
+        }
         // add listener of tap
 
         // rebuild layout
@@ -55,53 +105,36 @@ export class Board implements Widget {
 
     private drawStar(path: PIXI.GraphicsPath, dx: number, dy: number, R: number,
         r: number, rot: number) {
-        let deg2Rad = (i: number) => (36 * i - rot) / 180 * Math.PI;
+        const deg2Rad = (i: number) => (36 * i - rot) / 180 * Math.PI;
         path.clear();
-        path.moveTo(dx - Math.sin(deg2Rad(10)) * R, dy - Math.cos(deg2Rad(10)) * R);
+        const rad = deg2Rad(10)
+        path.moveTo(dx - Math.sin(rad) * R, dy - Math.cos(rad) * R);
         // 沿着10个点绘制路径
         for (let i = 1; i <= 10; i++) {
-            let rad = i % 2 == 1 ? r : R;
-            let posX = dx - Math.sin(deg2Rad(i)) * rad;
-            let posY = dy - Math.cos(deg2Rad(i)) * rad;
+            const rad = i % 2 == 1 ? r : R;
+            const posX = dx - Math.sin(deg2Rad(i)) * rad;
+            const posY = dy - Math.cos(deg2Rad(i)) * rad;
             path.lineTo(posX, posY);
         }
         path.closePath()
     }
 
-    // 绘制平滑的圆角矩形
-    private drawSmoothRoundRect(path: PIXI.GraphicsPath, left: number, top: number, width: number,
-        height: number, radius: number) {
-        let n = 4;
-        let gap = radius / n;
-        let right = left + width;
-        let btm = top + height;
-        path.clear();
-        path.moveTo(left, top + radius);
-        path.bezierCurveTo(left, top + gap, left + gap, top, left + radius, top);
-        path.lineTo(right - radius, top);
-        path.bezierCurveTo(right - gap, top, right, top + gap, right, top + radius);
-        path.lineTo(right, btm - radius);
-        path.bezierCurveTo(right, btm - gap, right - gap, btm, right - radius, btm);
-        path.lineTo(left + radius, btm);
-        path.bezierCurveTo(left + gap, btm, left, btm - gap, left, btm - radius);
-        path.closePath();
-    }
-
-    // color map
-    _colorMap(number: number): [number, number] {
-        switch (number) {
-            case 1:
-                return [0xFFEC7062, 0xFFE74C3C] // red
-            case 2:
-                return [0xFF5CADE2, 0xFF5599C7] // blue
-            case 3:
-                return [0xFFF4CF40, 0xFFF5B041] // yellow
-            case 4:
-                return [0xFFAF7AC4, 0xFFA569BD] // purple
-            case 5:
-                return [0xFF57D68C, 0xFF53BE80] // green
-            default:
-                return [0, 0]
-        }
-    }
+    // // 绘制平滑的圆角矩形
+    // private drawSmoothRoundRect(path: PIXI.GraphicsPath, left: number, top: number, width: number,
+    //     height: number, radius: number) {
+    //     const n = 4;
+    //     const gap = radius / n;
+    //     const right = left + width;
+    //     const btm = top + height;
+    //     path.clear();
+    //     path.moveTo(left, top + radius);
+    //     path.bezierCurveTo(left, top + gap, left + gap, top, left + radius, top);
+    //     path.lineTo(right - radius, top);
+    //     path.bezierCurveTo(right - gap, top, right, top + gap, right, top + radius);
+    //     path.lineTo(right, btm - radius);
+    //     path.bezierCurveTo(right, btm - gap, right - gap, btm, right - radius, btm);
+    //     path.lineTo(left + radius, btm);
+    //     path.bezierCurveTo(left + gap, btm, left, btm - gap, left, btm - radius);
+    //     path.closePath();
+    // }
 }

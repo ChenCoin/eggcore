@@ -4,16 +4,18 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite --host",
-    "build": "tsc && vite build --base=/eggcore/",
-    "preview": "vite preview"
+    "dev": "bunx --bun vite --host",
+    "build": "tsc && bunx --bun vite build --base=/eggcore/",
+    "preview": "bunx --bun vite preview"
   },
   "devDependencies": {
     "typescript": "^5.2.2",
-    "vite": "^5.2.0"
+    "vite": "^5.2.0",
+    "@types/bun": "latest"
   },
   "dependencies": {
     "@tweenjs/tween.js": "^23.1.2",
+    "bun-types": "^1.1.20",
     "pixi-filters": "^6.0.4",
     "pixi.js": "^8.2.5"
   }

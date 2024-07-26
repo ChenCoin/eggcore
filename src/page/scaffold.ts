@@ -10,8 +10,8 @@ export class Scaffold {
     public readonly height: number;
 
     constructor(fullWidth: number, fullHeight: number) {
-        let width = fullWidth - 20 // 上下5px阴影
-        let height = fullHeight - 20 // 上下5px阴影
+        let width = fullWidth
+        let height = fullHeight
         if (width * 16 > height * 10) {
             width = height / 16 * 10
         } else {
@@ -24,7 +24,9 @@ export class Scaffold {
     }
 
     static fromRenderer(renderer: Renderer): Scaffold {
-        return new Scaffold(renderer.width, renderer.height)
+        let width = Math.max(renderer.width, 300)
+        let height = Math.max(renderer.height, 500)
+        return new Scaffold(width, height)
     }
 
     public equals(other: Scaffold) {

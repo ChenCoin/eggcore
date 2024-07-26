@@ -50,6 +50,9 @@ export class Index implements Story {
 
         // init game data
         this.databus.init()
+        if (defaultIndex == 1) {
+            this.databus.start()
+        }
 
         if (import.meta.env.DEV && dartMode) {
             document.title = 'DEMO'

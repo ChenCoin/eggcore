@@ -3,4 +3,4 @@ const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
 export const dartMode = isDarkMode
 
-export const defaultIndex = 0
+export const defaultIndex = isDarkMode ? 1 : 0
