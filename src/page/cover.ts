@@ -1,32 +1,35 @@
 import { UX } from "../ux"
 
 export class Cover {
-    readonly width
-    readonly height
-    readonly gridY
-    readonly strokeSize = 1
-    readonly padding = 4
-    readonly contentWidth
-    readonly gridSize
-    readonly strokeHalf
-    readonly starPadding = 4
-    readonly starSize
-    readonly outerR
-    readonly innerR
-    readonly fillet = 12
+    readonly width: number
+    readonly height: number
+    readonly gridY: number
+    readonly strokeSize: number
+    readonly padding: number = 4
+    readonly contentWidth: number
+    readonly gridSize: number
+    readonly strokeHalf: number
+    readonly starPadding: number
+    readonly starSize: number
+    readonly outerR: number
+    readonly innerR: number
+    readonly fillet: number
 
     constructor(width: number, height: number) {
         this.width = width
         this.height = height
 
-        this.gridY = Math.ceil(height / 2 - width / 2 + 40)
+        this.gridY = height / 2 - width / 2 + 40
+        this.strokeSize = 1
         this.contentWidth = width - this.padding * 2
         const cw = this.contentWidth
         this.gridSize = (cw - this.strokeSize * (UX.col + 1)) / UX.col
-        this.strokeHalf = Math.ceil(this.strokeSize / 2)
+        this.strokeHalf = this.strokeSize / 2
 
-        this.starSize = Math.ceil(this.gridSize - this.starPadding * 2)
-        this.outerR = Math.ceil(this.starSize / 2 - 2)
-        this.innerR = Math.ceil(this.outerR / 2 + 1)
+        this.starPadding = this.gridSize / 32
+        this.starSize = this.gridSize - this.starPadding * 2
+        this.outerR = this.starSize * 15 / 32
+        this.innerR = this.outerR * 18 / 32
+        this.fillet = this.starSize / 5
     }
 }

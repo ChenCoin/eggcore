@@ -84,7 +84,7 @@ export class Board implements Widget {
 
         const extraSize = gridSize + strokeSize
         const extra = padding + strokeHalf + starPadding
-        const extraElse = Math.ceil(padding + strokeHalf + gridSize / 2)
+        const extraElse = padding + strokeHalf + gridSize / 2
         let allGrid = this.story.ofData().ofGrids()
         let path = new PIXI.GraphicsPath()
         this.allStar.clear()
@@ -104,7 +104,7 @@ export class Board implements Widget {
                 this.allStar.fill(color[1])
 
                 const cx = extraElse + j * extraSize
-                const cy = extraElse + i * extraSize + gridY + 1
+                const cy = extraElse + i * extraSize + gridY
                 this.drawStar(path, cx, cy, outerR, innerR, 0)
                 this.allStar.path(path)
                 this.allStar.fill(color[0])
