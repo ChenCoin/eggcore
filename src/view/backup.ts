@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js'
+import * as UX from '../ux'
 import { Scaffold } from '../page/scaffold'
 import { DropShadowFilter } from 'pixi-filters'
 
@@ -106,7 +107,7 @@ export class Backup {
             align: 'center',
             fill: '#ffffff', // 填充颜色
             stroke: {
-                color: 0xFFC107,
+                color: UX.themeColor,
                 width: 4,
             },
             dropShadow: {

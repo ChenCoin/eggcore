@@ -4,7 +4,7 @@ import { Page } from "./page";
 import { Scaffold } from "./scaffold";
 import { Size } from './size';
 import { Story } from './story';
-import { UX } from '../ux';
+import * as UX from '../ux';
 import { Cover } from './cover';
 
 export class ContentPanel implements Page {
@@ -36,23 +36,25 @@ export class ContentPanel implements Page {
     build(scaffold: Scaffold): void {
         this.group.x = scaffold.x
         this.group.y = scaffold.y
-        const paddingElse = 48
-        const x = paddingElse * 2
-        const y = 64
-        const width = scaffold.width - paddingElse * 4
-        const height = 48
+        const cover = new Cover(scaffold.width, scaffold.height)
+        const x = 8
+        const tempY = cover.height - cover.width - cover.yOffset
+        const y = tempY / 2 + 8
 
         const button = this.endButton
         button.filters = [UX.defaultShadow()]
         button.eventMode = 'static';
         button.removeAllListeners()
         button.on('pointertap', () => this.story.onPageChanged(0))
-        UX.drawButton(button, new Size(x, y, width, height), 24, 0xFFC107)
+        const buttonSize = UX.scoreTextSize - 2
+        const btnSize = new Size(x, y, buttonSize, buttonSize)
+        const btnRound = 8
+        UX.drawButton(button, btnSize, btnRound, 0xFFFFFF)
         const normalEvent = () => {
-            UX.drawButton(button, new Size(x, y, width, height), 24, 0xFFC107)
+            UX.drawButton(button, btnSize, btnRound, 0xFFFFFF)
         }
         UX.addButtonEvent(button, normalEvent, () => {
-            UX.drawButton(button, new Size(x, y, width, height), 24, 0xE5AC00)
+            UX.drawButton(button, btnSize, btnRound, 0xCCCCCC)
         })
         this.drawChessBoard(scaffold.width, scaffold.height)
         this.board.build(scaffold)

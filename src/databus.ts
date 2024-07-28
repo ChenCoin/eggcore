@@ -1,4 +1,4 @@
-import { UX } from "./ux"
+import * as UX from "./ux"
 
 export class Databus {
     private readonly allGrid = Array<Array<GridPoint>>()
@@ -7,6 +7,8 @@ export class Databus {
     private status: number = 0
 
     private score: number = 0
+
+    private level: number = 1
 
     public init() {
         for (let i = 0; i < UX.row; i++) {
@@ -33,6 +35,18 @@ export class Databus {
 
     public ofGrids(): Array<Array<GridPoint>> {
         return this.allGrid
+    }
+
+    public ofScore(): number {
+        return this.score
+    }
+
+    public ofLevel(): String {
+        return UX.levelInfo(this.level)
+    }
+
+    public ofLevelTarget(): String {
+        return UX.levelTargetInfo(1000)
     }
 
     public isGaming() {
@@ -86,7 +100,8 @@ export class Databus {
             }
         }
         // 统计分数
-        this.score += (sameColorGrids.length * sameColorGrids.length)
+        const gridCount = sameColorGrids.length
+        this.score += (gridCount * gridCount * 5)
         return sameColorGrids.length
     }
 

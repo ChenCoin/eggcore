@@ -1,7 +1,7 @@
 import { Scaffold } from "./scaffold"
 import { Page } from "./page"
 import * as PIXI from 'pixi.js'
-import { UX } from "../ux"
+import * as UX from "../ux"
 import { Size } from "./size"
 import { Story } from "./story"
 
@@ -35,28 +35,27 @@ export class FrontPanel implements Page {
         const style = new PIXI.TextStyle({
             align: 'center',
             fill: 0xFFFFFF,
-            fontFamily:'pig',
+            fontFamily: UX.pigFont,
             fontSize: 84,
             stroke: {
-                color: 0xFFC107,
+                color: UX.themeColor,
                 width: 16,
             },
         })
         title.anchor = 0.5
+        title.resolution = window.devicePixelRatio
         title.style = style
+        title.text = UX.title
 
         const btnText = this.buttonText
         const btnTextStyle = new PIXI.TextStyle({
             align: 'center',
             fill: 0xFFFFFF,
-            fontFamily:'HarmonyOS_Sans_SC_Regular',
+            fontFamily: UX.textFont,
             fontSize: 24,
-            stroke: {
-                color: 0xC0C0C0,
-                width: 1,
-            },
         })
         btnText.anchor = 0.5
+        btnText.resolution = window.devicePixelRatio
         btnText.style = btnTextStyle
     }
 
@@ -66,7 +65,6 @@ export class FrontPanel implements Page {
         const padding = 48
 
         const title = this.title
-        title.text = UX.title
         title.x = scaffold.width / 2
         title.y = scaffold.height / 2 - padding * 2
 
@@ -85,13 +83,15 @@ export class FrontPanel implements Page {
         button.eventMode = 'static';
         button.removeAllListeners()
         button.on('pointertap', () => this.story.onGameStart())
-        UX.drawButton(button, new Size(x, y, width, height), 24, 0xFFC107)
+        const btnSize = new Size(x, y, width, height)
+        const btnRound = 24
+        UX.drawButton(button, btnSize, btnRound, UX.themeColor)
         const normalEvent = () => {
-            UX.drawButton(button, new Size(x, y, width, height), 24, 0xFFC107)
+            UX.drawButton(button, btnSize, btnRound, UX.themeColor)
             btnText.style.fill = 0xFFFFFF
         }
         UX.addButtonEvent(button, normalEvent, () => {
-            UX.drawButton(button, new Size(x, y, width, height), 24, 0xE5AC00)
+            UX.drawButton(button, btnSize, btnRound, 0xE5AC00)
             btnText.style.fill = 0xDDDDDD
         })
     }

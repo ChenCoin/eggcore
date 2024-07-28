@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js'
 import { Widget } from "./page";
 import { Scaffold } from "./scaffold";
-import { UX } from '../ux';
+import * as UX from '../ux';
 import { Story } from './story';
 import { Cover } from './cover';
 
@@ -14,18 +14,15 @@ export class Board implements Widget {
 
     private tapArea = new PIXI.Graphics()
 
+    private scoreView = new PIXI.Text()
+
+    private levelView = new PIXI.Text()
+
+    private levelTargetView = new PIXI.Text()
+
     private scaffoldCache = new Scaffold(0, 0)
 
     private cover = new Cover(0, 0)
-
-    private readonly colorMap: Array<[number, number]> = [
-        [0xFFFFFF, 0x000000], // white
-        [0xEC7062, 0xE74C3C], // red
-        [0x5CADE2, 0x5599C7], // blue
-        [0xF4CF40, 0xF5B041], // yellow
-        [0xAF7AC4, 0xA569BD], // purple
-        [0x57D68C, 0x53BE80], // green
-    ]
 
     constructor(story: Story, group: PIXI.Container) {
         this.story = story
@@ -36,18 +33,22 @@ export class Board implements Widget {
         this.tapArea.zIndex = -1
         this.group.addChild(this.tapArea)
         this.group.addChild(this.allStar)
+        this.group.addChild(this.scoreView)
+        this.group.addChild(this.levelView)
+        this.group.addChild(this.levelTargetView)
     }
 
     build(scaffold: Scaffold): void {
         this.scaffoldCache = scaffold
-        this.cover = new Cover(scaffold.width, scaffold.height)
+        const cover = new Cover(scaffold.width, scaffold.height)
+        this.cover = cover
         // add listener
         let tapArea = this.tapArea
-        const padding = this.cover.padding
-        const cw = this.cover.contentWidth
-        const fillet = this.cover.fillet
+        const padding = cover.padding
+        const cw = cover.contentWidth
+        const fillet = cover.fillet
         const dx = padding
-        const dy = this.cover.gridY + padding
+        const dy = cover.gridY + padding
         tapArea.clear()
         tapArea.filletRect(dx, dy, cw, cw, fillet)
         tapArea.fill(0xFFFFFF)
@@ -65,6 +66,51 @@ export class Board implements Widget {
             }
         })
         this.draw()
+
+        let extra = new PIXI.Graphics()
+        extra.zIndex = -1
+        this.group.addChild(extra)
+        extra.rect(0, (cover.height - cover.width - cover.yOffset) / 2, cover.width, cover.yOffset)
+        // extra.fill(0xCDCDCD)
+
+        const scoreView = this.scoreView
+        const scoreSize = UX.scoreTextSize
+        const style = new PIXI.TextStyle({
+            align: 'center',
+            fill: UX.themeColor,
+            fontFamily: UX.pigFont,
+            fontSize: scoreSize,
+            stroke: {
+                color: 0x808080,
+                width: 1,
+            },
+        })
+        scoreView.anchor = 0.5
+        scoreView.resolution = window.devicePixelRatio
+        scoreView.style = style
+        scoreView.x = cover.width / 2
+        const tempY = cover.height - cover.width - cover.yOffset + scoreSize
+        scoreView.y = tempY / 2 + 8
+
+        const levelSize = 7
+        const levelStyle = new PIXI.TextStyle({
+            fill: UX.themeColor,
+            fontFamily: UX.textFont,
+            fontSize: levelSize * 3,
+        })
+        const levelView = this.levelView
+        levelView.anchor = 0
+        levelView.resolution = window.devicePixelRatio
+        levelView.style = levelStyle
+        levelView.x = cover.padding + 8
+        levelView.y = (cover.height - cover.width + cover.yOffset) / 2 - levelSize * 5
+
+        const levelTargetView = this.levelTargetView
+        levelTargetView.anchor = 0.5
+        levelTargetView.resolution = window.devicePixelRatio
+        levelTargetView.style = levelStyle
+        levelTargetView.x = cover.width / 2
+        levelTargetView.y = (cover.height - cover.width + cover.yOffset) / 2 - levelSize * 3
     }
 
     draw() {
@@ -94,7 +140,7 @@ export class Board implements Widget {
                 if (itemIndex == 0) {
                     continue
                 }
-                let color: [number, number] = this.colorMap[itemIndex]
+                let color: [number, number] = UX.colorMap[itemIndex]
 
                 const x = extra + j * extraSize
                 const y = extra + i * extraSize + gridY
@@ -110,9 +156,10 @@ export class Board implements Widget {
                 this.allStar.fill(color[0])
             }
         }
-        // add listener of tap
 
-        // rebuild layout
+        this.scoreView.text = this.story.ofData().ofScore()
+        this.levelView.text = this.story.ofData().ofLevel()
+        this.levelTargetView.text = this.story.ofData().ofLevelTarget()
     }
 
     destory(): void {
@@ -120,6 +167,9 @@ export class Board implements Widget {
         this.allStar.clear()
         this.group.removeChild(this.tapArea)
         this.group.removeChild(this.allStar)
+        this.group.removeChild(this.scoreView)
+        this.group.removeChild(this.levelView)
+        this.group.removeChild(this.levelTargetView)
     }
 
     private drawStar(path: PIXI.GraphicsPath, dx: number, dy: number, R: number,

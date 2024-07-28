@@ -7,7 +7,7 @@ import { Page } from './page'
 import { Scaffold } from './scaffold'
 import { Shade } from '../shade'
 import { Story } from './story'
-import { UX } from '../ux'
+import * as UX from '../ux'
 import { dartMode, defaultIndex } from '../global'
 
 export class Index implements Story {
@@ -124,14 +124,11 @@ export class Index implements Story {
         const style = new PIXI.TextStyle({
             align: 'center',
             fill: '#ffffff',
-            fontFamily: 'HarmonyOS_Sans_SC_Regular',
-            fontSize: 16,
-            stroke: {
-                color: 0xCCCCCC,
-                width: 1,
-            },
+            fontFamily: UX.textFont,
+            fontSize: 14,
         })
         this.versionText.anchor = 1
+        this.versionText.resolution = window.devicePixelRatio
         this.versionText.text = UX.version
         this.versionText.style = style
         this.app.stage.addChild(this.versionText)

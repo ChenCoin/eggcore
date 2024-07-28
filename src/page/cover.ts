@@ -1,8 +1,9 @@
-import { UX } from "../ux"
+import * as UX from "../ux"
 
 export class Cover {
     readonly width: number
     readonly height: number
+    readonly yOffset: number = 120
     readonly gridY: number
     readonly strokeSize: number
     readonly padding: number = 4
@@ -19,14 +20,14 @@ export class Cover {
         this.width = width
         this.height = height
 
-        this.gridY = height / 2 - width / 2 + 40
+        this.gridY = height / 2 - width / 2 + this.yOffset / 2
         this.strokeSize = 1
         this.contentWidth = width - this.padding * 2
         const cw = this.contentWidth
         this.gridSize = (cw - this.strokeSize * (UX.col + 1)) / UX.col
         this.strokeHalf = this.strokeSize / 2
 
-        this.starPadding = this.gridSize / 32
+        this.starPadding = this.gridSize / 24
         this.starSize = this.gridSize - this.starPadding * 2
         this.outerR = this.starSize * 15 / 32
         this.innerR = this.outerR * 18 / 32
