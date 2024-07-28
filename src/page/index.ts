@@ -19,7 +19,7 @@ export class Index implements Story {
 
     private readonly databus = new Databus()
 
-    private readonly versionText = new PIXI.Text()
+    private readonly versionText = UX.createText()
 
     private readonly background = new Background(this)
 
@@ -135,7 +135,6 @@ export class Index implements Story {
             fontSize: 14,
         })
         this.versionText.anchor = 1
-        this.versionText.resolution = window.devicePixelRatio
         this.versionText.text = UX.version
         this.versionText.style = style
         this.app.stage.addChild(this.versionText)

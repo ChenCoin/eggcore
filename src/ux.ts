@@ -1,7 +1,7 @@
 
 import { DropShadowFilter } from "pixi-filters"
 import { Size } from "./page/size"
-import { FillInput, Graphics } from "pixi.js"
+import { FillInput, Graphics, Text } from "pixi.js"
 
 export const row = 10
 
@@ -53,4 +53,10 @@ export function addButtonEvent(btn: Graphics, normal: () => void, press: () => v
     btn.on('pointerdown', () => press())
     btn.on('pointerup', () => normal())
     btn.on('pointerupoutside', () => normal())
+}
+
+export function createText(): Text {
+    const text = new Text()
+    text.resolution = window.devicePixelRatio * 1.5
+    return text
 }

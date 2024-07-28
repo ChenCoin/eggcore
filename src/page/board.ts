@@ -14,11 +14,11 @@ export class Board implements Widget {
 
     private tapArea = new PIXI.Graphics()
 
-    private scoreView = new PIXI.Text()
+    private scoreView = UX.createText()
 
-    private levelView = new PIXI.Text()
+    private levelView = UX.createText()
 
-    private levelTargetView = new PIXI.Text()
+    private levelTargetView = UX.createText()
 
     private scaffoldCache = new Scaffold(0, 0)
 
@@ -86,7 +86,6 @@ export class Board implements Widget {
             },
         })
         scoreView.anchor = 0.5
-        scoreView.resolution = window.devicePixelRatio
         scoreView.style = style
         scoreView.x = cover.width / 2
         const tempY = cover.height - cover.width - cover.yOffset + scoreSize
@@ -100,14 +99,12 @@ export class Board implements Widget {
         })
         const levelView = this.levelView
         levelView.anchor = 0
-        levelView.resolution = window.devicePixelRatio
         levelView.style = levelStyle
         levelView.x = cover.padding + 8
         levelView.y = (cover.height - cover.width + cover.yOffset) / 2 - levelSize * 5
 
         const levelTargetView = this.levelTargetView
         levelTargetView.anchor = 0.5
-        levelTargetView.resolution = window.devicePixelRatio
         levelTargetView.style = levelStyle
         levelTargetView.x = cover.width / 2
         levelTargetView.y = (cover.height - cover.width + cover.yOffset) / 2 - levelSize * 3

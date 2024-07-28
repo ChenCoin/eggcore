@@ -14,9 +14,9 @@ export class FrontPanel implements Page {
 
     private startButton = new PIXI.Graphics()
 
-    private title = new PIXI.Text()
+    private title = UX.createText()
 
-    private buttonText = new PIXI.Text()
+    private buttonText = UX.createText()
 
     constructor(story: Story) {
         this.story = story
@@ -43,7 +43,6 @@ export class FrontPanel implements Page {
             },
         })
         title.anchor = 0.5
-        title.resolution = window.devicePixelRatio
         title.style = style
         title.text = UX.title
 
@@ -55,7 +54,6 @@ export class FrontPanel implements Page {
             fontSize: 24,
         })
         btnText.anchor = 0.5
-        btnText.resolution = window.devicePixelRatio
         btnText.style = btnTextStyle
     }
 
