@@ -9,6 +9,7 @@ import { Shade } from '../shade'
 import { Story } from './story'
 import * as UX from '../ux'
 import { dartMode, defaultIndex } from '../global'
+import { Background } from './background'
 
 export class Index implements Story {
     // The application will create a renderer using WebGL, if possible,
@@ -19,6 +20,8 @@ export class Index implements Story {
     private readonly databus = new Databus()
 
     private readonly versionText = new PIXI.Text()
+
+    private readonly background = new Background(this)
 
     private readonly frontPanel = new FrontPanel(this)
 
@@ -81,6 +84,8 @@ export class Index implements Story {
         newPage.create()
         newPage.build(this.scaffoldCache)
         this.lastPage = newPage
+        // draw background
+        this.background.redraw()
     }
 
     public onGameStart(): void {
@@ -115,15 +120,17 @@ export class Index implements Story {
         this.scaffoldCache = newScaffold
 
         // 右下角版本信息
-        const padding = 4
-        this.versionText.x = this.app.renderer.width - padding * 4
-        this.versionText.y = this.app.renderer.height - padding
+        const padding = 5
+        this.versionText.x = this.app.renderer.width - padding * 2
+        this.versionText.y = this.app.renderer.height - padding * 2
+        // draw background
+        this.background.redraw()
     }
 
     private addVersionInfo() {
         const style = new PIXI.TextStyle({
             align: 'center',
-            fill: '#ffffff',
+            fill: '#FFFFFF',
             fontFamily: UX.textFont,
             fontSize: 14,
         })
