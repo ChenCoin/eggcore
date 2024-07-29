@@ -81,6 +81,7 @@ export class Index implements Story {
     }
 
     public onPageChanged(page: number) {
+        console.log(`temp onPageChanged ${page}`)
         this.pageIndex = page
         this.lastPage.destory()
         let newPage = this.showOnStatus()
@@ -98,7 +99,7 @@ export class Index implements Story {
 
     public onGameEnd(): void {
         this.databus.end()
-        this.onPageChanged(2)
+        this.onPageChanged(0)
     }
 
     public onGridTap(x: number, y: number): boolean {
@@ -106,10 +107,21 @@ export class Index implements Story {
         if (result) {
             const isFinish = this.databus.checkIfFinish()
             if (isFinish[0]) {
+                this.databus.end()
                 this.onPageChanged(2)
             }
         }
         return result
+    }
+
+    public toNextLevel(): void {
+        console.log(`temp toNextLevel`)
+        this.onPageChanged(1)
+    }
+
+    public toHomePage(): void {
+        console.log(`temp toHomePage`)
+        this.onPageChanged(0)
     }
 
     private showOnStatus(): Page {

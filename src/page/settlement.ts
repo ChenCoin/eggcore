@@ -4,6 +4,7 @@ import { Page } from "./page";
 import { Scaffold } from "./scaffold";
 import { Story } from './story';
 import { Size } from './size';
+import { TextButton } from '../view/button';
 
 export class Settlement implements Page {
     private story: Story
@@ -16,7 +17,7 @@ export class Settlement implements Page {
 
     private title = UX.createText()
 
-    private nextBtn = new PIXI.Graphics()
+    private nextBtn = new TextButton()
 
     constructor(story: Story) {
         this.story = story
@@ -26,7 +27,8 @@ export class Settlement implements Page {
     create(): void {
         this.group.addChild(this.background)
         this.group.addChild(this.title)
-        this.group.addChild(this.nextBtn)
+        this.nextBtn.addToGroup(this.group)
+        this.nextBtn.create(this.story.ofData().ofNextBtnText())
         this.app.stage.addChild(this.group)
     }
 
@@ -38,7 +40,9 @@ export class Settlement implements Page {
         const background = this.background
         const dw = scaffold.width / 8
         const dh = scaffold.height / 5
-        const size = new Size(dw, dh, dw * 6, dh * 3)
+        const width = dw * 6
+        const height = dh * 3
+        const size = new Size(dw, dh, width, height)
         UX.drawButton(background, size, dw / 2, 0xF5A40A)
         background.stroke({
             color: 0xF9C406,
@@ -58,6 +62,21 @@ export class Settlement implements Page {
         title.x = scaffold.width / 2
         title.y = dh + 32 + 42 / 2
         title.text = '通关'
+
+        const p = 32
+        const btnH = 48
+        const btnX = dw + p
+        const btnY = dh + height - p - btnH
+        const btnSize = new Size(btnX, btnY, width - p * 2, btnH)
+        const btnArgs = [0xFFFFFF, 0xDDDDDD, 0x000000, 0x444444]
+        this.nextBtn.draw(btnSize, 4, () => {
+            if (this.story.ofData().isOnLevelWait()) {
+                this.story.toNextLevel()
+                return
+            }
+            // this.story.ofData().isOnLevelFinish()
+            this.story.toHomePage()
+        }, btnArgs)
     }
 
     update(x: number, y: number): void {
@@ -75,7 +94,7 @@ export class Settlement implements Page {
 
     destory(): void {
         this.background.clear()
-        this.group.removeChild(this.nextBtn)
+        this.nextBtn.removeFromView(this.group)
         this.group.removeChild(this.title)
         this.group.removeChild(this.background)
         this.app.stage.removeChild(this.group)

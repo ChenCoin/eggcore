@@ -8,9 +8,12 @@ export class Databus {
 
     private score: number = 0
 
-    private level: number = 1
+    private level: number = 0
+
+    private readonly levelGoals = [1000, 2500, 4000, 5500, 7500, 9000, 11000, 13500, 16500]
 
     public init() {
+        console.log(`data init`)
         for (let i = 0; i < UX.row; i++) {
             this.allGrid[i] = new Array<GridPoint>()
             for (let j = 0; j < UX.col; j++) {
@@ -22,15 +25,24 @@ export class Databus {
     }
 
     public start() {
+        console.log(`data start`)
         this.loopGrid((grid) => grid.randomInit())
         this.score = 0
         this.status = 1
     }
 
     public end() {
-        this.loopGrid((grid) => grid.clear())
-        this.score = 0
-        this.status = 3
+        console.log(`data end`)
+        if (this.score >= this.currentLevelTarget()) {
+            this.level += 1
+            this.status = 3
+            this.loopGrid((grid) => grid.randomInit())
+        } else {
+            this.score = 0
+            this.level = 1
+            this.status = 4
+            this.loopGrid((grid) => grid.clear())
+        }
     }
 
     public ofGrids(): Array<Array<GridPoint>> {
@@ -42,15 +54,23 @@ export class Databus {
     }
 
     public ofLevel(): String {
-        return UX.levelInfo(this.level)
+        return UX.levelInfo(this.level + 1)
     }
 
     public ofLevelTarget(): String {
-        return UX.levelTargetInfo(1000)
+        return UX.levelTargetInfo(this.currentLevelTarget())
     }
 
-    public isGaming() {
-        return this.status == 1
+    public ofNextBtnText(): String {
+        return UX.nextLevel
+    }
+
+    public isOnLevelWait(): boolean {
+        return this.status == 3
+    }
+
+    public isOnLevelFinish(): boolean {
+        return this.status == 4
     }
 
     public onGridTap(x: number, y: number): boolean {
@@ -105,6 +125,32 @@ export class Databus {
         return sameColorGrids.length > 1
     }
 
+    public checkIfFinish(): [boolean, number] {
+        let count = 0
+        for (let i = 0; i < UX.row; i++) {
+            for (let j = 0; j < UX.col; j++) {
+                var gridNow = this.allGrid[i][j];
+                if (gridNow.isEmpty()) {
+                    continue;
+                }
+                count++
+                if (j != UX.col - 1) {
+                    var gridRight = this.allGrid[i][j + 1];
+                    if (gridNow.isSameColor(gridRight)) {
+                        return [false, 0];
+                    }
+                }
+                if (i != UX.row - 1) {
+                    var gridBtm = this.allGrid[i + 1][j];
+                    if (gridNow.isSameColor(gridBtm)) {
+                        return [false, 0];
+                    }
+                }
+            }
+        }
+        return [true, count];
+    }
+
     // 查找该方块四周相同颜色的方块
     private findSameColorGrids(theGrid: GridPoint): Array<[number, number]> {
         let sameColorGrids = new Array<[number, number]>()
@@ -157,38 +203,21 @@ export class Databus {
         return sameColorGrids
     }
 
-    public checkIfFinish(): [boolean, number] {
-        let count = 0
-        for (let i = 0; i < UX.row; i++) {
-            for (let j = 0; j < UX.col; j++) {
-                var gridNow = this.allGrid[i][j];
-                if (gridNow.isEmpty()) {
-                    continue;
-                }
-                count++
-                if (j != UX.col - 1) {
-                    var gridRight = this.allGrid[i][j + 1];
-                    if (gridNow.isSameColor(gridRight)) {
-                        return [false, 0];
-                    }
-                }
-                if (i != UX.row - 1) {
-                    var gridBtm = this.allGrid[i + 1][j];
-                    if (gridNow.isSameColor(gridBtm)) {
-                        return [false, 0];
-                    }
-                }
-            }
-        }
-        return [true, count];
-    }
-
     private loopGrid(fn: (grid: GridPoint) => void) {
         for (let i = 0; i < UX.row; i++) {
             for (let j = 0; j < UX.col; j++) {
                 fn(this.allGrid[i][j])
             }
         }
+    }
+
+    private currentLevelTarget(): number {
+        const level = this.level
+        const length = this.levelGoals.length
+        if (level >= length) {
+            return this.levelGoals[length - 1] + 2500 * (level - length + 1);
+        }
+        return this.levelGoals[level];
     }
 }
 

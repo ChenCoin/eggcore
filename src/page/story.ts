@@ -13,4 +13,8 @@ export interface Story {
     onGameEnd(): void
 
     onGridTap(x: number, y: number): boolean
+
+    toNextLevel(): void
+
+    toHomePage(): void
 }

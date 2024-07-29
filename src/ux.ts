@@ -32,6 +32,8 @@ export const title = '星星王国'
 
 export const startGame = '开始游戏'
 
+export const nextLevel = '下一关'
+
 export const levelInfo = (level: number) => `关卡: ${level}`
 
 export const levelTargetInfo = (target: number) => `目标: ${target}`

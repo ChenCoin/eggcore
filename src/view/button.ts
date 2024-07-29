@@ -3,9 +3,11 @@ import * as UX from "../ux"
 import { Size } from "../page/size"
 
 export class TextButton {
-    private button = new PIXI.Graphics()
+    private readonly button = new PIXI.Graphics()
 
-    private text = UX.createText()
+    private readonly text = UX.createText()
+
+    private readonly args = [UX.themeColor, 0xE5AC00, 0xFFFFFF, 0xDDDDDD]
 
     public addToGroup(group: PIXI.Container) {
         group.addChild(this.button)
@@ -25,21 +27,28 @@ export class TextButton {
         btnText.text = content
     }
 
-    public draw(size: Size, round: number, tap: () => void) {
+    public draw(size: Size, round: number, tap: () => void,
+        args: Array<PIXI.FillInput> = this.args) {
+        const btnColor = args[0]
+        const btnColorPress = args[1]
+        const textColor = args[2]
+        const textColorPress = args[3]
+
         const button = this.button
         button.filters = [UX.defaultShadow()]
         button.eventMode = 'static';
         button.removeAllListeners()
         button.on('pointertap', tap)
         const btnRound = round
-        UX.drawButton(button, size, btnRound, UX.themeColor)
+        UX.drawButton(button, size, btnRound, btnColor)
+        this.text.style.fill = textColor
         const normalEvent = () => {
-            UX.drawButton(button, size, btnRound, UX.themeColor)
-            this.text.style.fill = 0xFFFFFF
+            UX.drawButton(button, size, btnRound, btnColor)
+            this.text.style.fill = textColor
         }
         UX.addButtonEvent(button, normalEvent, () => {
-            UX.drawButton(button, size, btnRound, 0xE5AC00)
-            this.text.style.fill = 0xDDDDDD
+            UX.drawButton(button, size, btnRound, btnColorPress)
+            this.text.style.fill = textColorPress
         })
 
         this.text.x = size.x + size.width / 2
@@ -47,8 +56,8 @@ export class TextButton {
     }
 
     public removeFromView(group: PIXI.Container) {
+        this.button.clear()
         group.removeChild(this.button)
         group.removeChild(this.text)
-
     }
 }
