@@ -45,7 +45,7 @@ export class ContentPanel implements Page {
         const btn = this.endButton
         btn.eventMode = 'static';
         btn.removeAllListeners()
-        btn.on('pointertap', () => this.story.onPageChanged(0))
+        btn.on('pointertap', () => this.story.onGameEnd())
         this.drawButton(cover, x, y)
 
         const resume = () => this.drawButton(cover, x, y)

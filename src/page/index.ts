@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js'
 import * as Tween from '@tweenjs/tween.js'
+import * as UX from '../ux'
 import { ContentPanel } from './content'
 import { Databus } from '../databus'
 import { FrontPanel } from './front'
@@ -7,7 +8,6 @@ import { Page } from './page'
 import { Scaffold } from './scaffold'
 import { Shade } from '../shade'
 import { Story } from './story'
-import * as UX from '../ux'
 import { dartMode, defaultIndex } from '../global'
 import { Background } from './background'
 import { Settlement } from './settlement'
@@ -51,8 +51,8 @@ export class Index implements Story {
         document.body.appendChild(app.canvas)
 
         // load the fonts. todo zip the font to woff2
-        await PIXI.Assets.load('font/pig.otf')
-        await PIXI.Assets.load('font/HarmonyOS_Sans_SC_Regular.ttf')
+        await PIXI.Assets.load('font/pig.woff2')
+        await PIXI.Assets.load('font/harmony.woff2')
 
         // init game data
         this.databus.init()
@@ -98,7 +98,7 @@ export class Index implements Story {
 
     public onGameEnd(): void {
         this.databus.end()
-        this.onPageChanged(0)
+        this.onPageChanged(2)
     }
 
     public onGridTap(x: number, y: number): boolean {

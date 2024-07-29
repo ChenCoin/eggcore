@@ -40,7 +40,7 @@ export class Board implements Widget {
 
     build(scaffold: Scaffold): void {
         this.scaffoldCache = scaffold
-        const cover = new Cover(scaffold.width, scaffold.height)
+        const cover = scaffold.ofCover()
         this.cover = cover
         // add listener
         let tapArea = this.tapArea
@@ -93,7 +93,7 @@ export class Board implements Widget {
 
         const levelSize = 7
         const levelStyle = new PIXI.TextStyle({
-            fill: UX.themeColor,
+            fill: 0xFFFFFF,
             fontFamily: UX.textFont,
             fontSize: levelSize * 3,
         })

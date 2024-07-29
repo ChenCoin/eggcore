@@ -1,4 +1,5 @@
 import { Renderer } from "pixi.js";
+import { Cover } from "./cover";
 
 export class Scaffold {
     public readonly x: number;
@@ -8,6 +9,8 @@ export class Scaffold {
     public readonly width: number;
 
     public readonly height: number;
+
+    private readonly cover: Cover
 
     constructor(fullWidth: number, fullHeight: number) {
         let width = fullWidth
@@ -21,6 +24,7 @@ export class Scaffold {
         this.y = (fullHeight - height) / 2
         this.width = width
         this.height = height
+        this.cover = new Cover(width, height)
     }
 
     static fromRenderer(renderer: Renderer): Scaffold {
@@ -40,5 +44,9 @@ export class Scaffold {
 
     public sameSize(other: Scaffold) {
         return this.width == other.width && this.height == other.height
+    }
+
+    public ofCover(): Cover {
+        return this.cover
     }
 }

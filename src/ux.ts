@@ -13,7 +13,7 @@ export const themeColorPressed = 0xD49F00
 
 export const pigFont = 'pig'
 
-export const textFont = 'HarmonyOS_Sans_SC_Regular'
+export const textFont = 'harmony'
 
 export const scoreTextSize = 48
 
@@ -45,13 +45,15 @@ export function defaultShadow(): DropShadowFilter {
     return filter
 }
 
-export function drawButton(btn: Graphics, size: Size, round: number, style: FillInput) {
+export function drawButton(btn: Graphics, size: Size, round: number,
+    style: FillInput) {
     btn.clear()
     btn.filletRect(size.x, size.y, size.width, size.height, round)
     btn.fill(style)
 }
 
-export function addButtonEvent(btn: Graphics, normal: () => void, press: () => void) {
+export function addButtonEvent(btn: Graphics, normal: () => void,
+    press: () => void) {
     btn.on('pointerdown', () => press())
     btn.on('pointerup', () => normal())
     btn.on('pointerupoutside', () => normal())
