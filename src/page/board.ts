@@ -60,8 +60,8 @@ export class Board implements Widget {
             const x = Math.floor((event.globalX - dx - this.group.x) / gridSize)
             const y = Math.floor((event.globalY - dy - this.group.y) / gridSize)
             console.log(`tap event: ${x} ${y}`)
-            const result = this.story.ofData().onGridTap(x, y)
-            if (result > 1) {
+            const result = this.story.onGridTap(x, y)
+            if (result) {
                 this.draw()
             }
         })

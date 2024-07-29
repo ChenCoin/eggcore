@@ -10,6 +10,7 @@ import { Story } from './story'
 import * as UX from '../ux'
 import { dartMode, defaultIndex } from '../global'
 import { Background } from './background'
+import { Settlement } from './settlement'
 
 export class Index implements Story {
     // The application will create a renderer using WebGL, if possible,
@@ -26,6 +27,8 @@ export class Index implements Story {
     private readonly frontPanel = new FrontPanel(this)
 
     private readonly contentPanel = new ContentPanel(this)
+
+    private readonly settlement = new Settlement(this)
 
     private pageIndex: number = defaultIndex
 
@@ -98,12 +101,26 @@ export class Index implements Story {
         this.onPageChanged(0)
     }
 
+    public onGridTap(x: number, y: number): boolean {
+        let result = this.databus.onGridTap(x, y)
+        if (result) {
+            const isFinish = this.databus.checkIfFinish()
+            if (isFinish[0]) {
+                this.onPageChanged(2)
+            }
+        }
+        return result
+    }
+
     private showOnStatus(): Page {
         if (this.pageIndex == 0) {
             return this.frontPanel
         }
         if (this.pageIndex == 1) {
             return this.contentPanel
+        }
+        if (this.pageIndex == 2) {
+            return this.settlement
         }
         return this.frontPanel
     }

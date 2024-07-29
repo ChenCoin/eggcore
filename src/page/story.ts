@@ -11,4 +11,6 @@ export interface Story {
     onGameStart(): void
 
     onGameEnd(): void
+
+    onGridTap(x: number, y: number): boolean
 }

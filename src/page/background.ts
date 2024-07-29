@@ -25,10 +25,13 @@ export class Background implements Page {
         const gradientFill = new PIXI.FillGradient(0, 0, width, height)
         gradientFill.addColorStop(0, 0x2C2E78)
         gradientFill.addColorStop(9 / 10, 0x3C2D58);
-
-        // Create a fill graphic
         this.panel.rect(0, 0, width, height).fill(gradientFill)
 
+        // const radius = Math.min(width, height) * 2 / 5
+        // const gradientCircle = new PIXI.FillGradient(0, 0, radius, radius)
+        // gradientCircle.addColorStop(0, 0x432E5C)
+        // gradientCircle.addColorStop(9 / 10, 0x391E3F);
+        // this.panel.circle(0, height, radius).fill(gradientCircle)
         this.panel.circle(0, height, Math.min(width, height) * 2 / 5).fill(0x391E3F)
     }
 

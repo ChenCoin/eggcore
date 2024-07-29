@@ -13,9 +13,9 @@ export class Scaffold {
         let width = fullWidth
         let height = fullHeight
         if (width * 16 > height * 10) {
-            width = height / 16 * 10
+            width = height * 10 / 16
         } else {
-            height = width / 10 * 16
+            height = width * 16 / 10
         }
         this.x = (fullWidth - width) / 2
         this.y = (fullHeight - height) / 2

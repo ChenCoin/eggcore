@@ -36,26 +36,21 @@ export class ContentPanel implements Page {
     build(scaffold: Scaffold): void {
         this.group.x = scaffold.x
         this.group.y = scaffold.y
+
         const cover = new Cover(scaffold.width, scaffold.height)
         const x = 8
         const tempY = cover.height - cover.width - cover.yOffset
         const y = tempY / 2 + 8
 
-        const button = this.endButton
-        button.filters = [UX.defaultShadow()]
-        button.eventMode = 'static';
-        button.removeAllListeners()
-        button.on('pointertap', () => this.story.onPageChanged(0))
-        const buttonSize = UX.scoreTextSize - 2
-        const btnSize = new Size(x, y, buttonSize, buttonSize)
-        const btnRound = 8
-        UX.drawButton(button, btnSize, btnRound, 0xFFFFFF)
-        const normalEvent = () => {
-            UX.drawButton(button, btnSize, btnRound, 0xFFFFFF)
-        }
-        UX.addButtonEvent(button, normalEvent, () => {
-            UX.drawButton(button, btnSize, btnRound, 0xCCCCCC)
-        })
+        const btn = this.endButton
+        btn.eventMode = 'static';
+        btn.removeAllListeners()
+        btn.on('pointertap', () => this.story.onPageChanged(0))
+        this.drawButton(cover, x, y)
+
+        const resume = () => this.drawButton(cover, x, y)
+        UX.addButtonEvent(btn, resume, () => this.drawBtnPressed(cover, x, y))
+
         this.drawChessBoard(scaffold.width, scaffold.height)
         this.board.build(scaffold)
     }
@@ -79,6 +74,30 @@ export class ContentPanel implements Page {
         this.group.removeChild(this.endButton)
         this.group.removeChild(this.chessboard)
         this.app.stage.removeChild(this.group)
+    }
+
+    private drawBtnPressed(cover: Cover, x: number, y: number) {
+        this.drawButton(cover, x, y, true)
+    }
+
+    private drawButton(cover: Cover, x: number, y: number, isPress = false) {
+        const button = this.endButton
+        button.clear()
+
+        const buttonSize = cover.starSize
+        const btnSize = new Size(x, y, buttonSize, buttonSize)
+        const btnRound = cover.fillet
+        const bgrColor = isPress ? UX.themeColorPressed : UX.themeColor
+        UX.drawButton(button, btnSize, btnRound, bgrColor)
+
+        const stickRound = buttonSize / 10
+        const x1 = x + stickRound * 2
+        const x2 = x + stickRound * 6
+        const y0 = y + stickRound * 2
+        button.filletRect(x1, y0, stickRound * 2, stickRound * 6, stickRound)
+        button.filletRect(x2, y0, stickRound * 2, stickRound * 6, stickRound)
+        const stickColor = isPress ? 0xC0C0C0 : 0xFFFFFF
+        button.fill(stickColor)
     }
 
     private drawChessBoard(width: number, height: number) {

@@ -9,6 +9,8 @@ export const col: number = 10
 
 export const themeColor = 0xFFC107
 
+export const themeColorPressed = 0xD49F00
+
 export const pigFont = 'pig'
 
 export const textFont = 'HarmonyOS_Sans_SC_Regular'
@@ -57,6 +59,6 @@ export function addButtonEvent(btn: Graphics, normal: () => void, press: () => v
 
 export function createText(): Text {
     const text = new Text()
-    text.resolution = window.devicePixelRatio * 1.5
+    text.resolution = Math.ceil(window.devicePixelRatio)
     return text
 }

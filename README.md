@@ -85,3 +85,14 @@ button.on('pointertap', (event) => {
 ## 划动事件
 
 ## 事件分发
+
+PIXI.Renderer配置
+https://pixijs.download/v5.0.0-alpha.2/docs/PIXI.Renderer.html
+PIXI.settings配置
+https://api.pixijs.io/@pixi/settings/PIXI/settings.html
+PIXI性能优化
+https://pixijs.com/8.x/guides/production/performance-tips
+
+PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+
+https://github.com/pixijs/pixijs/discussions/10756

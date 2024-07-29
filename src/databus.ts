@@ -53,17 +53,17 @@ export class Databus {
         return this.status == 1
     }
 
-    public onGridTap(x: number, y: number): number {
+    public onGridTap(x: number, y: number): boolean {
         if (x < 0 || y < 0 || x >= UX.col || y >= UX.row) {
-            return 0
+            return false
         }
         let theGrid = this.allGrid[y][x]
         if (theGrid.isEmpty()) {
-            return 0
+            return false
         }
         let sameColorGrids = this.findSameColorGrids(theGrid)
         if (sameColorGrids.length <= 1) {
-            return 0
+            return false
         }
         // 消除相同颜色的方块
         console.log(`total: ${sameColorGrids.length}`)
@@ -102,7 +102,7 @@ export class Databus {
         // 统计分数
         const gridCount = sameColorGrids.length
         this.score += (gridCount * gridCount * 5)
-        return sameColorGrids.length
+        return sameColorGrids.length > 1
     }
 
     // 查找该方块四周相同颜色的方块
@@ -157,6 +157,32 @@ export class Databus {
         return sameColorGrids
     }
 
+    public checkIfFinish(): [boolean, number] {
+        let count = 0
+        for (let i = 0; i < UX.row; i++) {
+            for (let j = 0; j < UX.col; j++) {
+                var gridNow = this.allGrid[i][j];
+                if (gridNow.isEmpty()) {
+                    continue;
+                }
+                count++
+                if (j != UX.col - 1) {
+                    var gridRight = this.allGrid[i][j + 1];
+                    if (gridNow.isSameColor(gridRight)) {
+                        return [false, 0];
+                    }
+                }
+                if (i != UX.row - 1) {
+                    var gridBtm = this.allGrid[i + 1][j];
+                    if (gridNow.isSameColor(gridBtm)) {
+                        return [false, 0];
+                    }
+                }
+            }
+        }
+        return [true, count];
+    }
+
     private loopGrid(fn: (grid: GridPoint) => void) {
         for (let i = 0; i < UX.row; i++) {
             for (let j = 0; j < UX.col; j++) {
@@ -200,7 +226,7 @@ export class GridPoint {
         this.value = 0
     }
 
-    public equals(other: GridPoint) {
+    public equals(other: GridPoint): boolean {
         return this.value == other.value
     }
 
@@ -210,5 +236,9 @@ export class GridPoint {
 
     public clone(other: GridPoint) {
         this.value = other.value
+    }
+
+    public isSameColor(other: GridPoint): boolean {
+        return this.value == other.value
     }
 }
