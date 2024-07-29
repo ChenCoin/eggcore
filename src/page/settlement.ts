@@ -35,8 +35,6 @@ export class Settlement implements Page {
     build(scaffold: Scaffold): void {
         this.group.x = scaffold.x
         this.group.y = scaffold.y
-        const cover = scaffold.ofCover()
-
         const background = this.background
         const dw = scaffold.width / 8
         const dh = scaffold.height / 5
