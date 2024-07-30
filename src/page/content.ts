@@ -49,7 +49,7 @@ export class ContentPanel implements Page {
         this.drawButton(cover, x, y)
 
         const resume = () => this.drawButton(cover, x, y)
-        UX.addButtonEvent(btn, resume, () => this.drawBtnPressed(cover, x, y))
+        UX.addBtnEvent(btn, resume, () => this.drawBtnPressed(cover, x, y))
 
         this.drawChessBoard(scaffold.width, scaffold.height)
         this.board.build(scaffold)

@@ -34,6 +34,10 @@ export const startGame = '开始游戏'
 
 export const nextLevel = '下一关'
 
+export const backHome = '回到首页'
+
+export const pass = '通关'
+
 export const levelInfo = (level: number) => `关卡: ${level}`
 
 export const levelTargetInfo = (target: number) => `目标: ${target}`
@@ -54,11 +58,16 @@ export function drawButton(btn: Graphics, size: Size, round: number,
     btn.fill(style)
 }
 
-export function addButtonEvent(btn: Graphics, normal: () => void,
-    press: () => void) {
-    btn.on('pointerdown', () => press())
-    btn.on('pointerup', () => normal())
-    btn.on('pointerupoutside', () => normal())
+export function drawCard(card: Graphics, size: Size, round: number,
+    style: FillInput) {
+    card.filletRect(size.x, size.y, size.width, size.height, round)
+    card.fill(style)
+}
+
+export function addBtnEvent(btn: Graphics, up: () => void, down: () => void) {
+    btn.on('pointerdown', down)
+    btn.on('pointerup', up)
+    btn.on('pointerupoutside', up)
 }
 
 export function createText(): Text {

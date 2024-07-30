@@ -25,7 +25,7 @@ export class FrontPanel implements Page {
     create(): void {
         this.group.addChild(this.title)
         this.textButton.addToGroup(this.group)
-        this.textButton.create(UX.startGame)
+        this.textButton.create(UX.startGame, () => this.story.onGameStart())
         this.app.stage.addChild(this.group)
         // new object
         // new groups and add object to groups
@@ -60,7 +60,7 @@ export class FrontPanel implements Page {
         const width = scaffold.width - padding * 4
         const height = 48
         const btnSize = new Size(x, y, width, height)
-        this.textButton.draw(btnSize, 24, () => this.story.onGameStart())
+        this.textButton.draw(btnSize, 24)
     }
 
     update(x: number, y: number): void {

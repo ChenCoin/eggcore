@@ -28,7 +28,14 @@ export class Settlement implements Page {
         this.group.addChild(this.background)
         this.group.addChild(this.title)
         this.nextBtn.addToGroup(this.group)
-        this.nextBtn.create(this.story.ofData().ofNextBtnText())
+        this.nextBtn.create(this.story.ofData().ofNextBtnText(), () => {
+            if (this.story.ofData().isOnLevelWait()) {
+                this.story.toNextLevel()
+                return
+            }
+            // this.story.ofData().isOnLevelFinish()
+            this.story.toHomePage()
+        })
         this.app.stage.addChild(this.group)
     }
 
@@ -36,18 +43,17 @@ export class Settlement implements Page {
         this.group.x = scaffold.x
         this.group.y = scaffold.y
         const background = this.background
+        background.clear()
+
         const dw = scaffold.width / 8
         const dh = scaffold.height / 5
         const width = dw * 6
         const height = dh * 3
-        const size = new Size(dw, dh, width, height)
-        UX.drawButton(background, size, dw / 2, 0xF5A40A)
-        background.stroke({
-            color: 0xF9C406,
-            width: 12,
-        })
 
-        this.story.onGridTap(-1, -1) // remove this line
+        const outerSize = new Size(dw - 6, dh - 6, width + 12, height + 12)
+        UX.drawCard(background, outerSize, dw / 2, 0xF9C406)
+        const innerSize = new Size(dw + 6, dh + 6, width - 12, height - 12)
+        UX.drawCard(background, innerSize, dw / 2, 0xF5A40A)
 
         const textStyle = new PIXI.TextStyle({
             fill: 0xFFFFFF,
@@ -59,7 +65,7 @@ export class Settlement implements Page {
         title.style = textStyle
         title.x = scaffold.width / 2
         title.y = dh + 32 + 42 / 2
-        title.text = '通关'
+        title.text = UX.pass
 
         const p = 32
         const btnH = 48
@@ -67,14 +73,7 @@ export class Settlement implements Page {
         const btnY = dh + height - p - btnH
         const btnSize = new Size(btnX, btnY, width - p * 2, btnH)
         const btnArgs = [0xFFFFFF, 0xDDDDDD, 0x000000, 0x444444]
-        this.nextBtn.draw(btnSize, 4, () => {
-            if (this.story.ofData().isOnLevelWait()) {
-                this.story.toNextLevel()
-                return
-            }
-            // this.story.ofData().isOnLevelFinish()
-            this.story.toHomePage()
-        }, btnArgs)
+        this.nextBtn.draw(btnSize, 4, btnArgs)
     }
 
     update(x: number, y: number): void {

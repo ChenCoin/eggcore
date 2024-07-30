@@ -29,6 +29,7 @@ export class Databus {
         this.loopGrid((grid) => grid.randomInit())
         this.score = 0
         this.status = 1
+        this.level = 0
     }
 
     public end() {
@@ -39,7 +40,7 @@ export class Databus {
             this.loopGrid((grid) => grid.randomInit())
         } else {
             this.score = 0
-            this.level = 1
+            this.level = 0
             this.status = 4
             this.loopGrid((grid) => grid.clear())
         }
@@ -62,7 +63,10 @@ export class Databus {
     }
 
     public ofNextBtnText(): String {
-        return UX.nextLevel
+        if (this.status == 3) {
+            return UX.nextLevel
+        }
+        return UX.backHome
     }
 
     public isOnLevelWait(): boolean {

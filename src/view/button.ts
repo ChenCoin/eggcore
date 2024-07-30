@@ -9,12 +9,16 @@ export class TextButton {
 
     private readonly args = [UX.themeColor, 0xE5AC00, 0xFFFFFF, 0xDDDDDD]
 
+    private btnDown = () => { }
+
+    private btnUp = () => { }
+
     public addToGroup(group: PIXI.Container) {
         group.addChild(this.button)
         group.addChild(this.text)
     }
 
-    public create(content: String) {
+    public create(content: String, tap: () => void) {
         const btnText = this.text
         const btnTextStyle = new PIXI.TextStyle({
             align: 'center',
@@ -25,10 +29,15 @@ export class TextButton {
         btnText.anchor = 0.5
         btnText.style = btnTextStyle
         btnText.text = content
+
+        const button = this.button
+        button.eventMode = 'static';
+        button.removeAllListeners()
+        button.on('pointertap', tap)
+        UX.addBtnEvent(button, () => this.btnDown(), () => this.btnUp())
     }
 
-    public draw(size: Size, round: number, tap: () => void,
-        args: Array<PIXI.FillInput> = this.args) {
+    public draw(size: Size, round: number, args: Array<PIXI.FillInput> = this.args) {
         const btnColor = args[0]
         const btnColorPress = args[1]
         const textColor = args[2]
@@ -36,20 +45,17 @@ export class TextButton {
 
         const button = this.button
         button.filters = [UX.defaultShadow()]
-        button.eventMode = 'static';
-        button.removeAllListeners()
-        button.on('pointertap', tap)
         const btnRound = round
         UX.drawButton(button, size, btnRound, btnColor)
         this.text.style.fill = textColor
-        const normalEvent = () => {
+        this.btnDown = () => {
+            UX.drawButton(button, size, btnRound, btnColorPress)
+            this.text.style.fill = textColorPress
+        }
+        this.btnUp = () => {
             UX.drawButton(button, size, btnRound, btnColor)
             this.text.style.fill = textColor
         }
-        UX.addButtonEvent(button, normalEvent, () => {
-            UX.drawButton(button, size, btnRound, btnColorPress)
-            this.text.style.fill = textColorPress
-        })
 
         this.text.x = size.x + size.width / 2
         this.text.y = size.y + size.height / 2
