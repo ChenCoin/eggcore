@@ -23,16 +23,42 @@ export class Background implements Page {
         const height = renderer.height
 
         const gradientFill = new PIXI.FillGradient(0, 0, width, height)
-        gradientFill.addColorStop(0, 0x2C2E78)
-        gradientFill.addColorStop(9 / 10, 0x3C2D58);
+        gradientFill.addColorStop(0, 0x55AEC0)
+        gradientFill.addColorStop(1 / 2, 0xABC3B6);
         this.panel.rect(0, 0, width, height).fill(gradientFill)
 
-        // const radius = Math.min(width, height) * 2 / 5
-        // const gradientCircle = new PIXI.FillGradient(0, 0, radius, radius)
-        // gradientCircle.addColorStop(0, 0x432E5C)
-        // gradientCircle.addColorStop(9 / 10, 0x391E3F);
-        // this.panel.circle(0, height, radius).fill(gradientCircle)
-        this.panel.circle(0, height, Math.min(width, height) * 2 / 5).fill(0x391E3F)
+        const path = new PIXI.GraphicsPath()
+
+        path.clear()
+        path.moveTo(0, height * 5 / 8)
+        path.lineTo(width * 5 / 12, height * 2 / 5)
+        path.lineTo(width, height * 9 / 16)
+        path.lineTo(0, height * 5 / 8)
+        this.panel.path(path).fill(0x7A7C93)
+
+        path.clear()
+        path.moveTo(0, height / 2)
+        path.lineTo(width, height)
+        path.lineTo(0, height)
+        path.lineTo(0, height / 2)
+        this.panel.path(path).fill(0x4D5D77)
+
+        path.clear()
+        path.moveTo(0, height * 7 / 8)
+        path.lineTo(width, height * 9 / 10)
+        path.lineTo(width, height)
+        path.lineTo(0, height)
+        path.lineTo(0, height * 7 / 8)
+        this.panel.path(path).fill(0xC08774)
+
+        path.clear()
+        path.moveTo(0, height * 5 / 8)
+        path.lineTo(width, height * 9 / 16)
+        path.lineTo(width, height * 9 / 10)
+        path.lineTo(0, height * 7 / 8)
+        path.lineTo(0, height * 5 / 8)
+        this.panel.path(path).fill(0xD09982)
+
     }
 
     update(_x: number, _y: number): void {
