@@ -81,16 +81,17 @@ export class Databus {
         if (x < 0 || y < 0 || x >= UX.col || y >= UX.row) {
             return TapEventResult.ofNothing()
         }
-        let theGrid = this.allGrid[y][x]
+        const theGrid = this.allGrid[y][x]
         if (theGrid.isEmpty()) {
             return TapEventResult.ofNothing()
         }
-        let sameColorGrids = this.findSameColorGrids(theGrid)
+        const sameColorGrids = this.findSameColorGrids(theGrid)
         if (sameColorGrids.length <= 1) {
             return TapEventResult.ofNothing()
         }
         // 消除相同颜色的方块
         console.log(`total: ${sameColorGrids.length}`)
+        const theColor = theGrid.ofColor()
         sameColorGrids.forEach(pos => {
             console.log(`grid ${pos[0]} ${pos[1]}`)
             this.allGrid[pos[0]][pos[1]].clear()
@@ -126,7 +127,7 @@ export class Databus {
         // 统计分数
         const gridCount = sameColorGrids.length
         this.score += (gridCount * gridCount * 5)
-        return TapEventResult.ofBreak(theGrid.ofColor(), sameColorGrids)
+        return TapEventResult.ofBreak(theColor, sameColorGrids)
     }
 
     public checkIfFinish(): [boolean, number] {
@@ -284,6 +285,14 @@ export class BreakPoint {
     constructor(color: number, list: Array<[number, number]>) {
         this.color = color
         this.list = list
+    }
+
+    public ofColor(): number {
+        return this.color
+    }
+
+    public ofList(): Array<[number, number]> {
+        return this.list
     }
 }
 

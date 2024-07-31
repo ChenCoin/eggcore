@@ -1,10 +1,9 @@
 import * as PIXI from 'pixi.js'
+import * as UX from '../ux';
 import { Board } from './board';
 import { Page } from "./page";
 import { Scaffold } from "./scaffold";
-import { Size } from './size';
 import { Story } from './story';
-import * as UX from '../ux';
 import { Cover } from './cover';
 
 export class ContentPanel implements Page {

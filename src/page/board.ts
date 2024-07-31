@@ -1,10 +1,11 @@
 import * as PIXI from 'pixi.js'
 import * as Tween from '@tweenjs/tween.js'
 import * as UX from '../ux';
+import { Cover } from './cover';
 import { Widget } from "./page";
 import { Scaffold } from "./scaffold";
 import { Story } from './story';
-import { Cover } from './cover';
+import { StarDrawer } from './draw';
 
 export class Board implements Widget {
     private story: Story
@@ -25,6 +26,8 @@ export class Board implements Widget {
 
     private cover = new Cover(0, 0)
 
+    private starDrawer = new StarDrawer(this.cover)
+
     constructor(story: Story, group: PIXI.Container) {
         this.story = story
         this.group = group
@@ -42,6 +45,7 @@ export class Board implements Widget {
     build(scaffold: Scaffold): void {
         this.scaffoldCache = scaffold
         const cover = scaffold.ofCover()
+        this.starDrawer = new StarDrawer(cover)
         this.cover = cover
         // add listener
         let tapArea = this.tapArea
@@ -66,14 +70,19 @@ export class Board implements Widget {
                 // draw static stars
                 this.draw()
                 // create break stars animotion
-                const va = { x: 0 }
-                new Tween.Tween(va, false)
+                const breakPoint = result.ofBreakStar()
+                const position = { x: 0, y: 0 }
+
+                new Tween.Tween(position)
                     .to({ x: 100 }, 1000)
                     .easing(Tween.Easing.Quadratic.InOut)
-                    .onUpdate(() => {
-                        console.log(`onUpdate ${va.x}`)
-                    })
+                    .onUpdate(() =>
+                        this.starDrawer.drawBreakStar(this.allStar, breakPoint)
+                    )
+                    .onComplete(() => this.draw())
                     .start()
+
+                console.log(`Tween start`)
                 // create moving stars animotion
             }
         })
@@ -124,47 +133,8 @@ export class Board implements Widget {
 
     draw() {
         console.log(`draw star, scaffold: ${this.scaffoldCache}`)
-        // draw all star
-        const gridY = this.cover.gridY
-        const strokeSize = this.cover.strokeSize
-        const padding = this.cover.padding
-        const gridSize = this.cover.gridSize
-        const strokeHalf = this.cover.strokeHalf
-
-        const starPadding = this.cover.starPadding
-        const starSize = this.cover.starSize
-        const outerR = this.cover.outerR
-        const innerR = this.cover.innerR
-        const fillet = this.cover.fillet
-
-        const extraSize = gridSize + strokeSize
-        const extra = padding + strokeHalf + starPadding
-        const extraElse = padding + strokeHalf + gridSize / 2
-        let allGrid = this.story.ofData().ofGrids()
-        let path = new PIXI.GraphicsPath()
         this.allStar.clear()
-        for (let i = 0; i < UX.row; i++) {
-            for (let j = 0; j < UX.col; j++) {
-                let itemIndex = allGrid[i][j].ofColor()
-                if (itemIndex == 0) {
-                    continue
-                }
-                let color: [number, number] = UX.colorMap[itemIndex]
-
-                const x = extra + j * extraSize
-                const y = extra + i * extraSize + gridY
-                // rect: x, y, starSize, starSize
-                this.allStar.filters = []
-                this.allStar.filletRect(x, y, starSize, starSize, fillet)
-                this.allStar.fill(color[1])
-
-                const cx = extraElse + j * extraSize
-                const cy = extraElse + i * extraSize + gridY
-                this.drawStar(path, cx, cy, outerR, innerR, 0)
-                this.allStar.path(path)
-                this.allStar.fill(color[0])
-            }
-        }
+        this.starDrawer.draw(this.allStar, this.story.ofData().ofGrids())
 
         this.scoreView.text = this.story.ofData().ofScore()
         this.levelView.text = this.story.ofData().ofLevel()
