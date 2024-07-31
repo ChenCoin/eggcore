@@ -29,7 +29,7 @@ export class Scaffold {
 
     static fromRenderer(renderer: Renderer): Scaffold {
         let width = Math.max(renderer.width, 300)
-        let height = Math.max(renderer.height, 500)
+        let height = Math.max(renderer.height, 480)
         return new Scaffold(width, height)
     }
 

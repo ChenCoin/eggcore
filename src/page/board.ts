@@ -1,7 +1,8 @@
 import * as PIXI from 'pixi.js'
+import * as Tween from '@tweenjs/tween.js'
+import * as UX from '../ux';
 import { Widget } from "./page";
 import { Scaffold } from "./scaffold";
-import * as UX from '../ux';
 import { Story } from './story';
 import { Cover } from './cover';
 
@@ -62,7 +63,18 @@ export class Board implements Widget {
             console.log(`tap event: ${x} ${y}`)
             const result = this.story.onGridTap(x, y)
             if (result) {
+                // draw static stars
                 this.draw()
+                // create break stars animotion
+                const va = { x: 0 }
+                new Tween.Tween(va, false)
+                    .to({ x: 100 }, 1000)
+                    .easing(Tween.Easing.Quadratic.InOut)
+                    .onUpdate(() => {
+                        console.log(`onUpdate ${va.x}`)
+                    })
+                    .start()
+                // create moving stars animotion
             }
         })
         this.draw()

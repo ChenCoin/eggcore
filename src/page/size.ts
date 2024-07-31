@@ -17,4 +17,8 @@ export class Size {
     static only(width: number, height: number): Size {
         return new Size(0, 0, width, height)
     }
+
+    static of(x: number, y: number, width: number, height: number) {
+        return new Size(x, y, width, height)
+    }
 }

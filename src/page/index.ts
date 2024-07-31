@@ -47,6 +47,7 @@ export class Index implements Story {
             resizeTo: window, // 大小为全屏
             resolution: window.devicePixelRatio, // 适配缩放的分辨率
         })
+        // app.ticker.add((tick) => Tween.update(tick.deltaTime))
         app.ticker.add(() => Tween.update())
         document.body.appendChild(app.canvas)
 

@@ -49,11 +49,12 @@ export class Settlement implements Page {
         const dh = scaffold.height / 5
         const width = dw * 6
         const height = dh * 3
+        const q = dw / 8
 
-        const outerSize = new Size(dw - 6, dh - 6, width + 12, height + 12)
-        UX.drawCard(background, outerSize, dw / 2, 0xF9C406)
-        const innerSize = new Size(dw + 6, dh + 6, width - 12, height - 12)
-        UX.drawCard(background, innerSize, dw / 2, 0xF5A40A)
+        const outerSize = Size.of(dw - q, dh - q, width + q * 2, height + q * 2)
+        UX.drawCard(background, outerSize, q * 4, 0xF9C406)
+        const innerSize = Size.of(dw + q, dh + q, width - q * 2, height - q * 2)
+        UX.drawCard(background, innerSize, q * 2, 0xF5A40A)
 
         const textStyle = new PIXI.TextStyle({
             fill: 0xFFFFFF,

@@ -275,3 +275,14 @@ export class GridPoint {
         return this.value == other.value
     }
 }
+
+export class BreakPoint {
+    private readonly color: number;
+
+    private readonly list: Array<[number, number]>
+
+    constructor(color: number, list: Array<[number, number]>) {
+        this.color = color
+        this.list = list
+    }
+}
