@@ -40,7 +40,7 @@ export class ContentPanel implements Page {
         const cover = new Cover(scaffold.width, scaffold.height)
         const x = 8
         const tempY = cover.height - cover.width - cover.yOffset
-        const y = tempY / 2 + 8
+        const y = tempY / 2 + 16
 
         const btn = this.endButton
         btn.eventMode = 'static';
@@ -84,16 +84,20 @@ export class ContentPanel implements Page {
         const button = this.endButton
         button.clear()
 
-        const buttonSize = cover.starSize
-        const btnSize = new Size(x, y, buttonSize, buttonSize)
-        const btnRound = cover.fillet
+        const buttonSize = cover.starSize / 2
         const bgrColor = isPress ? UX.themeColorPressed : UX.themeColor
-        UX.drawButton(button, btnSize, btnRound, bgrColor)
+        if (isPress) {
+            button.filters = UX.shadowPressed()
+        } else {
+            button.filters = UX.shadowDefault()
+        }
+        // UX.drawButton(button, btnSize, btnRound, bgrColor)
+        button.circle(x + buttonSize, y + buttonSize, buttonSize).fill(bgrColor)
 
-        const stickRound = buttonSize / 10
-        const x1 = x + stickRound * 2
-        const x2 = x + stickRound * 6
-        const y0 = y + stickRound * 2
+        const stickRound = buttonSize / 5
+        const x1 = x + stickRound * 2.5
+        const x2 = x + stickRound * 5.5
+        const y0 = y + stickRound * 2 - 0.5
         button.filletRect(x1, y0, stickRound * 2, stickRound * 6, stickRound)
         button.filletRect(x2, y0, stickRound * 2, stickRound * 6, stickRound)
         const stickColor = isPress ? 0xC0C0C0 : 0xFFFFFF

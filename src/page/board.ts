@@ -62,7 +62,7 @@ export class Board implements Widget {
             const y = Math.floor((event.globalY - dy - this.group.y) / gridSize)
             console.log(`tap event: ${x} ${y}`)
             const result = this.story.onGridTap(x, y)
-            if (result) {
+            if (result.isBreak()) {
                 // draw static stars
                 this.draw()
                 // create break stars animotion

@@ -77,17 +77,17 @@ export class Databus {
         return this.status == 4
     }
 
-    public onGridTap(x: number, y: number): boolean {
+    public onGridTap(x: number, y: number): TapEventResult {
         if (x < 0 || y < 0 || x >= UX.col || y >= UX.row) {
-            return false
+            return TapEventResult.ofNothing()
         }
         let theGrid = this.allGrid[y][x]
         if (theGrid.isEmpty()) {
-            return false
+            return TapEventResult.ofNothing()
         }
         let sameColorGrids = this.findSameColorGrids(theGrid)
         if (sameColorGrids.length <= 1) {
-            return false
+            return TapEventResult.ofNothing()
         }
         // 消除相同颜色的方块
         console.log(`total: ${sameColorGrids.length}`)
@@ -126,7 +126,7 @@ export class Databus {
         // 统计分数
         const gridCount = sameColorGrids.length
         this.score += (gridCount * gridCount * 5)
-        return sameColorGrids.length > 1
+        return TapEventResult.ofBreak(theGrid.ofColor(), sameColorGrids)
     }
 
     public checkIfFinish(): [boolean, number] {
@@ -284,5 +284,32 @@ export class BreakPoint {
     constructor(color: number, list: Array<[number, number]>) {
         this.color = color
         this.list = list
+    }
+}
+
+export class TapEventResult {
+    private readonly isStarBreak: boolean;
+
+    private readonly breakPoint: BreakPoint
+
+    constructor(isStarBreak: boolean, breakPoint: BreakPoint) {
+        this.isStarBreak = isStarBreak
+        this.breakPoint = breakPoint
+    }
+
+    public static ofNothing(): TapEventResult {
+        return new TapEventResult(false, new BreakPoint(0, []))
+    }
+
+    public static ofBreak(color: number, list: Array<[number, number]>): TapEventResult {
+        return new TapEventResult(true, new BreakPoint(color, list))
+    }
+
+    public isBreak(): boolean {
+        return this.isStarBreak;
+    }
+
+    public ofBreakStar(): BreakPoint {
+        return this.breakPoint
     }
 }

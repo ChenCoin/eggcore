@@ -34,7 +34,7 @@ export class TextButton {
         button.eventMode = 'static';
         button.removeAllListeners()
         button.on('pointertap', tap)
-        UX.addBtnEvent(button, () => this.btnDown(), () => this.btnUp())
+        UX.addBtnEvent(button, () => this.btnUp(), () => this.btnDown())
     }
 
     public draw(size: Size, round: number, args: Array<PIXI.FillInput> = this.args) {
@@ -44,15 +44,19 @@ export class TextButton {
         const textColorPress = args[3]
 
         const button = this.button
-        button.filters = [UX.defaultShadow()]
+        const downShadow = UX.shadowPressed()
+        const upShadow = UX.shadowDefault()
+        button.filters = [upShadow]
         const btnRound = round
         UX.drawButton(button, size, btnRound, btnColor)
         this.text.style.fill = textColor
         this.btnDown = () => {
+            button.filters = downShadow
             UX.drawButton(button, size, btnRound, btnColorPress)
             this.text.style.fill = textColorPress
         }
         this.btnUp = () => {
+            button.filters = upShadow
             UX.drawButton(button, size, btnRound, btnColor)
             this.text.style.fill = textColor
         }

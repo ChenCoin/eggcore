@@ -15,7 +15,7 @@ export const pigFont = 'pig'
 
 export const textFont = 'harmony'
 
-export const scoreTextSize = 48
+export const scoreTextSize = 54
 
 export const colorMap: Array<[number, number]> = [
     [0xFFFFFF, 0x000000], // white
@@ -42,10 +42,19 @@ export const levelInfo = (level: number) => `关卡: ${level}`
 
 export const levelTargetInfo = (target: number) => `目标: ${target}`
 
-export function defaultShadow(): DropShadowFilter {
+export function shadowDefault(): DropShadowFilter {
     let filter = new DropShadowFilter()
     filter.color = 0x404040
     filter.alpha = 0.5
+    filter.antialias = 'on'
+    filter.resolution = window.devicePixelRatio
+    return filter
+}
+
+export function shadowPressed(): DropShadowFilter {
+    let filter = new DropShadowFilter()
+    filter.color = 0x404040
+    filter.alpha = 0.8
     filter.antialias = 'on'
     filter.resolution = window.devicePixelRatio
     return filter

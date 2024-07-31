@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js'
 import * as Tween from '@tweenjs/tween.js'
 import * as UX from '../ux'
 import { ContentPanel } from './content'
-import { Databus } from '../databus'
+import { Databus, TapEventResult } from '../databus'
 import { FrontPanel } from './front'
 import { Page } from './page'
 import { Scaffold } from './scaffold'
@@ -43,7 +43,7 @@ export class Index implements Story {
         await app.init({
             antialias: true, // 抗锯齿
             autoDensity: true,
-            backgroundColor: 0x6495ed,
+            backgroundColor: 0xABC3B6,
             resizeTo: window, // 大小为全屏
             resolution: window.devicePixelRatio, // 适配缩放的分辨率
         })
@@ -103,9 +103,9 @@ export class Index implements Story {
         this.onPageChanged(0)
     }
 
-    public onGridTap(x: number, y: number): boolean {
+    public onGridTap(x: number, y: number): TapEventResult {
         let result = this.databus.onGridTap(x, y)
-        if (result) {
+        if (result.isBreak()) {
             const isFinish = this.databus.checkIfFinish()
             if (isFinish[0]) {
                 this.databus.end()
