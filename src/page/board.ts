@@ -150,39 +150,4 @@ export class Board implements Widget {
         this.group.removeChild(this.levelView)
         this.group.removeChild(this.levelTargetView)
     }
-
-    private drawStar(path: PIXI.GraphicsPath, dx: number, dy: number, R: number,
-        r: number, rot: number) {
-        const deg2Rad = (i: number) => (36 * i - rot) / 180 * Math.PI;
-        path.clear();
-        const rad = deg2Rad(10)
-        path.moveTo(dx - Math.sin(rad) * R, dy - Math.cos(rad) * R);
-        // 沿着10个点绘制路径
-        for (let i = 1; i <= 10; i++) {
-            const rad = i % 2 == 1 ? r : R;
-            const posX = dx - Math.sin(deg2Rad(i)) * rad;
-            const posY = dy - Math.cos(deg2Rad(i)) * rad;
-            path.lineTo(posX, posY);
-        }
-        path.closePath()
-    }
-
-    // // 绘制平滑的圆角矩形
-    // private drawSmoothRoundRect(path: PIXI.GraphicsPath, left: number, top: number, width: number,
-    //     height: number, radius: number) {
-    //     const n = 4;
-    //     const gap = radius / n;
-    //     const right = left + width;
-    //     const btm = top + height;
-    //     path.clear();
-    //     path.moveTo(left, top + radius);
-    //     path.bezierCurveTo(left, top + gap, left + gap, top, left + radius, top);
-    //     path.lineTo(right - radius, top);
-    //     path.bezierCurveTo(right - gap, top, right, top + gap, right, top + radius);
-    //     path.lineTo(right, btm - radius);
-    //     path.bezierCurveTo(right, btm - gap, right - gap, btm, right - radius, btm);
-    //     path.lineTo(left + radius, btm);
-    //     path.bezierCurveTo(left + gap, btm, left, btm - gap, left, btm - radius);
-    //     path.closePath();
-    // }
 }

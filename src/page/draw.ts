@@ -100,4 +100,23 @@ export class StarDrawer {
         }
         path.closePath()
     }
+
+    // // 绘制平滑的圆角矩形
+    // private drawSmoothRoundRect(path: PIXI.GraphicsPath, left: number, top: number, width: number,
+    //     height: number, radius: number) {
+    //     const n = 4;
+    //     const gap = radius / n;
+    //     const right = left + width;
+    //     const btm = top + height;
+    //     path.clear();
+    //     path.moveTo(left, top + radius);
+    //     path.bezierCurveTo(left, top + gap, left + gap, top, left + radius, top);
+    //     path.lineTo(right - radius, top);
+    //     path.bezierCurveTo(right - gap, top, right, top + gap, right, top + radius);
+    //     path.lineTo(right, btm - radius);
+    //     path.bezierCurveTo(right, btm - gap, right - gap, btm, right - radius, btm);
+    //     path.lineTo(left + radius, btm);
+    //     path.bezierCurveTo(left + gap, btm, left, btm - gap, left, btm - radius);
+    //     path.closePath();
+    // }
 }
