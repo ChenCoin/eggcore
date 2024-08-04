@@ -40,7 +40,11 @@ export class StarDrawer {
         const path = new PIXI.GraphicsPath()
         for (let i = 0; i < UX.row; i++) {
             for (let j = 0; j < UX.col; j++) {
-                let itemIndex = allGrid[i][j].ofColor()
+                const item = allGrid[i][j]
+                if (item.isMoving()) {
+                    continue
+                }
+                let itemIndex = item.ofColor()
                 if (itemIndex == 0) {
                     continue
                 }
@@ -62,9 +66,8 @@ export class StarDrawer {
         }
     }
 
-    public drawBreakStar(allStar: PIXI.Graphics, animValue: number,
+    public drawBreakStar(panel: PIXI.Graphics, animValue: number,
         breakPoint: BreakPoint) {
-
         const path = new PIXI.GraphicsPath()
         const list = breakPoint.ofList()
         let colorIndex = breakPoint.ofColor()
@@ -90,12 +93,41 @@ export class StarDrawer {
                 const cx = this.extraElse + j * this.extraSize + rx
                 const cy = this.extraElse + i * this.extraSize + this.gridY + ry
                 this.drawStar(path, cx, cy, this.outerR, this.innerR, rz)
-                allStar.path(path)
-                allStar.fill({
+                panel.path(path)
+                panel.fill({
                     color: color,
                     alpha: alpha,
                 })
             }
+        }
+    }
+
+    public drawMovingStar(panel: PIXI.Graphics, anim: number,
+        movingPoint: Array<GridPoint>) {
+        const path = new PIXI.GraphicsPath()
+        const size = movingPoint.length
+        const animNum = anim / 1000
+        for (let k = 0; k < size; k++) {
+            const item = movingPoint[k]
+            let itemIndex = item.ofColor()
+            if (itemIndex == 0) {
+                continue
+            }
+            const color: [number, number] = UX.colorMap[itemIndex]
+            const [j, i] = item.ofPosition(animNum)
+
+            const x = this.extra + j * this.extraSize
+            const y = this.extra + i * this.extraSize + this.gridY
+            // rect: x, y, starSize, starSize
+            panel.filters = []
+            panel.filletRect(x, y, this.starSize, this.starSize, this.fillet)
+            panel.fill(color[1])
+
+            const cx = this.extraElse + j * this.extraSize
+            const cy = this.extraElse + i * this.extraSize + this.gridY
+            this.drawStar(path, cx, cy, this.outerR, this.innerR, 0)
+            panel.path(path)
+            panel.fill(color[0])
         }
     }
 

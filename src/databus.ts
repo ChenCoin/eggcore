@@ -96,39 +96,7 @@ export class Databus {
             console.log(`grid ${pos[0]} ${pos[1]}`)
             this.allGrid[pos[0]][pos[1]].clear()
         })
-        const movingGrids = new Array<GridPoint>()
-        // 方块消除后，上方的方块下落
-        for (let i = 0; i < UX.col; i++) {
-            let blank = 0
-            for (let j = UX.row - 1; j >= 0; j--) {
-                if (blank > 0) {
-                    const grid = this.allGrid[j + blank][i]
-                    grid.clone(this.allGrid[j][i])
-                    movingGrids.push(grid)
-                }
-                if (this.allGrid[j][i].isEmpty()) {
-                    blank++
-                } else if (blank > 0) {
-                    this.allGrid[j][i].clear()
-                }
-            }
-        }
-        // 某一个列的方块都被消除，则移动右侧的方块
-        let blank = 0
-        for (let i = 0; i < UX.col; i++) {
-            if (this.allGrid[UX.row - 1][i].isEmpty()) {
-                blank++
-            } else {
-                if (blank > 0) {
-                    for (let j = 0; j < UX.row; j++) {
-                        const grid = this.allGrid[j][i - blank]
-                        grid.clone(this.allGrid[j][i])
-                        movingGrids.push(grid)
-                        this.allGrid[j][i].clear()
-                    }
-                }
-            }
-        }
+        const movingGrids = this.checkoutMovingStar()
         // 统计分数
         const gridCount = sameColorGrids.length
         this.score += (gridCount * gridCount * 5)
@@ -213,6 +181,43 @@ export class Databus {
         return sameColorGrids
     }
 
+    private checkoutMovingStar(): Array<GridPoint> {
+        const movingGrids = new Array<GridPoint>()
+        // 方块消除后，上方的方块下落
+        for (let i = 0; i < UX.col; i++) {
+            let blank = 0
+            for (let j = UX.row - 1; j >= 0; j--) {
+                if (blank > 0) {
+                    const grid = this.allGrid[j + blank][i]
+                    grid.clone(this.allGrid[j][i])
+                    movingGrids.push(grid)
+                }
+                if (this.allGrid[j][i].isEmpty()) {
+                    blank++
+                } else if (blank > 0) {
+                    this.allGrid[j][i].clear()
+                }
+            }
+        }
+        // 某一个列的方块都被消除，则移动右侧的方块
+        let blank = 0
+        for (let i = 0; i < UX.col; i++) {
+            if (this.allGrid[UX.row - 1][i].isEmpty()) {
+                blank++
+            } else {
+                if (blank > 0) {
+                    for (let j = 0; j < UX.row; j++) {
+                        const grid = this.allGrid[j][i - blank]
+                        grid.clone(this.allGrid[j][i])
+                        movingGrids.push(grid)
+                        this.allGrid[j][i].clear()
+                    }
+                }
+            }
+        }
+        return movingGrids
+    }
+
     private loopGrid(fn: (grid: GridPoint) => void) {
         for (let i = 0; i < UX.row; i++) {
             for (let j = 0; j < UX.col; j++) {
@@ -268,6 +273,12 @@ export class GridPoint {
         this.position = [dx, dy]
     }
 
+    public ofPosition(animNum: number): [number, number] {
+        const x = this.position[0] + (this.dx - this.position[0]) * animNum
+        const y = this.position[1] + (this.dy - this.position[1]) * animNum
+        return [x, y]
+    }
+
     public clear() {
         this.value = 0
     }
@@ -282,7 +293,11 @@ export class GridPoint {
 
     public clone(other: GridPoint) {
         this.value = other.value
-        this.position = other.position
+        if (this.moving) {
+            this.position = this.checkoutPosition()
+        } else {
+            this.position = other.position
+        }
     }
 
     public isSameColor(other: GridPoint): boolean {
@@ -290,19 +305,21 @@ export class GridPoint {
     }
 
     public startMove(anim: { x: number }) {
-        if (this.moving) {
-            this.position = this.checkoutPosition()
-            this.anim = anim
-        } else {
-            this.moving = true
-            this.anim = anim
-        }
+        this.moving = true
+        this.anim = anim
     }
 
-    public endMove() {
+    public endMove(anim: { x: number }) {
+        if (anim != this.anim) {
+            return
+        }
         this.moving = false
         this.anim = { x: 0 }
         this.position = [this.dx, this.dy]
+    }
+
+    public isMoving(): boolean {
+        return this.moving
     }
 
     private checkoutPosition(): [number, number] {
