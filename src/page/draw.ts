@@ -62,26 +62,40 @@ export class StarDrawer {
         }
     }
 
-    public drawBreakStar(allStar: PIXI.Graphics, breakPoint: BreakPoint) {
-        console.log(`draw`)
+    public drawBreakStar(allStar: PIXI.Graphics, animValue: number,
+        breakPoint: BreakPoint) {
+
         const path = new PIXI.GraphicsPath()
         const list = breakPoint.ofList()
+        let colorIndex = breakPoint.ofColor()
+        if (colorIndex == 0) {
+            return
+        }
+        let color = UX.colorMap[colorIndex][0]
+
+        const animNum = animValue / 1000
+        const alpha = 1 - 0.5 * animNum
         for (let k = 0; k < list.length; k++) {
             const item = list[k]
+            const size = item.length - 2
             const i = item[0]
             const j = item[1]
-            let colorIndex = breakPoint.ofColor()
-            if (colorIndex == 0) {
-                console.log(`draw 0`)
-                continue
+            for (let index = 0; index < size; index++) {
+                // rect: x, y, starSize, starSize
+                const radius = item[index + 2]
+
+                const rx = 100 * animNum * Math.sin(radius * 2 * Math.PI)
+                const ry = 100 * animNum * Math.cos(radius * 2 * Math.PI)
+                const rz = 360 * animNum
+                const cx = this.extraElse + j * this.extraSize + rx
+                const cy = this.extraElse + i * this.extraSize + this.gridY + ry
+                this.drawStar(path, cx, cy, this.outerR, this.innerR, rz)
+                allStar.path(path)
+                allStar.fill({
+                    color: color,
+                    alpha: alpha,
+                })
             }
-            let color: [number, number] = UX.colorMap[colorIndex]
-            // rect: x, y, starSize, starSize
-            const cx = this.extraElse + j * this.extraSize
-            const cy = this.extraElse + i * this.extraSize + this.gridY
-            this.drawStar(path, cx, cy, this.outerR, this.innerR, 0)
-            allStar.path(path)
-            allStar.fill(color[0])
         }
     }
 

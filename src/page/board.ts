@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js'
 import * as Tween from '@tweenjs/tween.js'
 import * as UX from '../ux';
+import { BreakPoint } from '../databus';
 import { Cover } from './cover';
 import { Widget } from "./page";
 import { Scaffold } from "./scaffold";
@@ -13,6 +14,8 @@ export class Board implements Widget {
     private group: PIXI.Container
 
     private allStar = new PIXI.Graphics()
+
+    private animStar = new PIXI.Graphics()
 
     private tapArea = new PIXI.Graphics()
 
@@ -37,6 +40,7 @@ export class Board implements Widget {
         this.tapArea.zIndex = -1
         this.group.addChild(this.tapArea)
         this.group.addChild(this.allStar)
+        this.group.addChild(this.animStar)
         this.group.addChild(this.scoreView)
         this.group.addChild(this.levelView)
         this.group.addChild(this.levelTargetView)
@@ -71,19 +75,28 @@ export class Board implements Widget {
                 this.draw()
                 // create break stars animotion
                 const breakPoint = result.ofBreakStar()
-                const position = { x: 0, y: 0 }
-
-                new Tween.Tween(position)
-                    .to({ x: 100 }, 1000)
+                const anim: { x: number } = { x: 0 }
+                new Tween.Tween(anim)
+                    .to({ x: 1000 }, 1000)
                     .easing(Tween.Easing.Quadratic.InOut)
-                    .onUpdate(() =>
-                        this.starDrawer.drawBreakStar(this.allStar, breakPoint)
-                    )
+                    .onUpdate(() => this.drawBreakStar(anim.x, breakPoint))
                     .onComplete(() => this.draw())
                     .start()
 
                 console.log(`Tween start`)
                 // create moving stars animotion
+                const movingPoint = result.ofMovingStar()
+                const animMove: { x: number } = { x: 0 }
+                for (let index = 0; index < movingPoint.length; index++) {
+                    const element = movingPoint[index];
+                    element.startMove(animMove)
+                }
+                // new Tween.Tween(animMove)
+                //     .to({ x: 1000 }, 1000)
+                //     .easing(Tween.Easing.Quadratic.InOut)
+                //     .onUpdate(() => this.drawBreakStar(anim.x, breakPoint))
+                //     .onComplete(() => this.draw())
+                //     .start()
             }
         })
         this.draw()
@@ -134,6 +147,7 @@ export class Board implements Widget {
     draw() {
         console.log(`draw star, scaffold: ${this.scaffoldCache}`)
         this.allStar.clear()
+        this.animStar.clear()
         this.starDrawer.draw(this.allStar, this.story.ofData().ofGrids())
 
         this.scoreView.text = this.story.ofData().ofScore()
@@ -144,10 +158,17 @@ export class Board implements Widget {
     destory(): void {
         this.tapArea.clear()
         this.allStar.clear()
+        this.animStar.clear()
         this.group.removeChild(this.tapArea)
         this.group.removeChild(this.allStar)
+        this.group.removeChild(this.animStar)
         this.group.removeChild(this.scoreView)
         this.group.removeChild(this.levelView)
         this.group.removeChild(this.levelTargetView)
+    }
+
+    private drawBreakStar(animValue: number, breakPoint: BreakPoint) {
+        this.animStar.clear()
+        this.starDrawer.drawBreakStar(this.animStar, animValue, breakPoint)
     }
 }

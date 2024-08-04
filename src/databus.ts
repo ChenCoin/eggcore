@@ -89,19 +89,22 @@ export class Databus {
         if (sameColorGrids.length <= 1) {
             return TapEventResult.ofNothing()
         }
-        // 消除相同颜色的方块
+        // break the grid with same color
         console.log(`total: ${sameColorGrids.length}`)
         const theColor = theGrid.ofColor()
         sameColorGrids.forEach(pos => {
             console.log(`grid ${pos[0]} ${pos[1]}`)
             this.allGrid[pos[0]][pos[1]].clear()
         })
+        const movingGrids = new Array<GridPoint>()
         // 方块消除后，上方的方块下落
         for (let i = 0; i < UX.col; i++) {
             let blank = 0
             for (let j = UX.row - 1; j >= 0; j--) {
                 if (blank > 0) {
-                    this.allGrid[j + blank][i].clone(this.allGrid[j][i])
+                    const grid = this.allGrid[j + blank][i]
+                    grid.clone(this.allGrid[j][i])
+                    movingGrids.push(grid)
                 }
                 if (this.allGrid[j][i].isEmpty()) {
                     blank++
@@ -118,7 +121,9 @@ export class Databus {
             } else {
                 if (blank > 0) {
                     for (let j = 0; j < UX.row; j++) {
-                        this.allGrid[j][i - blank].clone(this.allGrid[j][i])
+                        const grid = this.allGrid[j][i - blank]
+                        grid.clone(this.allGrid[j][i])
+                        movingGrids.push(grid)
                         this.allGrid[j][i].clear()
                     }
                 }
@@ -127,7 +132,7 @@ export class Databus {
         // 统计分数
         const gridCount = sameColorGrids.length
         this.score += (gridCount * gridCount * 5)
-        return TapEventResult.ofBreak(theColor, sameColorGrids)
+        return TapEventResult.ofBreak(theColor, sameColorGrids, movingGrids)
     }
 
     public checkIfFinish(): [boolean, number] {
@@ -233,6 +238,12 @@ export class GridPoint {
 
     private dy: number
 
+    private moving: boolean = false
+
+    private position: [number, number] = [0, 0]
+
+    private anim: { x: number } = { x: 0 }
+
     constructor(value: number) {
         this.value = value
         this.dx = 0
@@ -254,6 +265,7 @@ export class GridPoint {
     public setPivot(dx: number, dy: number) {
         this.dx = dx
         this.dy = dy
+        this.position = [dx, dy]
     }
 
     public clear() {
@@ -270,19 +282,45 @@ export class GridPoint {
 
     public clone(other: GridPoint) {
         this.value = other.value
+        this.position = other.position
     }
 
     public isSameColor(other: GridPoint): boolean {
         return this.value == other.value
+    }
+
+    public startMove(anim: { x: number }) {
+        if (this.moving) {
+            this.position = this.checkoutPosition()
+            this.anim = anim
+        } else {
+            this.moving = true
+            this.anim = anim
+        }
+    }
+
+    public endMove() {
+        this.moving = false
+        this.anim = { x: 0 }
+        this.position = [this.dx, this.dy]
+    }
+
+    private checkoutPosition(): [number, number] {
+        const pos = this.position
+        const x = pos[0] + (this.dx - pos[0]) * this.anim.x / 1000
+        const y = pos[1] + (this.dy - pos[1]) * this.anim.x / 1000
+        return [x, y]
     }
 }
 
 export class BreakPoint {
     private readonly color: number;
 
-    private readonly list: Array<[number, number]>
+    // data of list item is [y, x, random ... ]
+    // the size of random star would be list.length - 2
+    private readonly list: Array<Array<number>>
 
-    constructor(color: number, list: Array<[number, number]>) {
+    constructor(color: number, list: Array<Array<number>>) {
         this.color = color
         this.list = list
     }
@@ -291,7 +329,7 @@ export class BreakPoint {
         return this.color
     }
 
-    public ofList(): Array<[number, number]> {
+    public ofList(): Array<Array<number>> {
         return this.list
     }
 }
@@ -301,17 +339,30 @@ export class TapEventResult {
 
     private readonly breakPoint: BreakPoint
 
-    constructor(isStarBreak: boolean, breakPoint: BreakPoint) {
-        this.isStarBreak = isStarBreak
-        this.breakPoint = breakPoint
+    private readonly movingPoint: Array<GridPoint>
+
+    constructor(isBreak: boolean, breaks: BreakPoint, moving: Array<GridPoint>) {
+        this.isStarBreak = isBreak
+        this.breakPoint = breaks
+        this.movingPoint = moving
     }
 
     public static ofNothing(): TapEventResult {
-        return new TapEventResult(false, new BreakPoint(0, []))
+        return new TapEventResult(false, new BreakPoint(0, []), [])
     }
 
-    public static ofBreak(color: number, list: Array<[number, number]>): TapEventResult {
-        return new TapEventResult(true, new BreakPoint(color, list))
+    public static ofBreak(color: number, list: Array<Array<number>>,
+        moving: Array<GridPoint>): TapEventResult {
+        for (let index = 0; index < list.length; index++) {
+            const element = list[index];
+            const randomSize = Math.random()
+            const size = Math.ceil(randomSize * 3)
+            for (let i = 0; i < size; i++) {
+                const random = Math.random()
+                element.push(random)
+            }
+        }
+        return new TapEventResult(true, new BreakPoint(color, list), moving)
     }
 
     public isBreak(): boolean {
@@ -320,5 +371,9 @@ export class TapEventResult {
 
     public ofBreakStar(): BreakPoint {
         return this.breakPoint
+    }
+
+    public ofMovingStar(): Array<GridPoint> {
+        return this.movingPoint
     }
 }
