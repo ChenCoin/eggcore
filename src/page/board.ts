@@ -7,6 +7,7 @@ import { Widget } from "./page";
 import { Scaffold } from "./scaffold";
 import { Story } from './story';
 import { StarDrawer } from './draw';
+import { FederatedMouseEvent } from 'pixi.js';
 
 export class Board implements Widget {
     private story: Story
@@ -68,50 +69,10 @@ export class Board implements Widget {
         tapArea.eventMode = 'static';
         tapArea.removeAllListeners()
         const gridSize = (scaffold.width - padding * 2) / UX.col
-        tapArea.on('pointertap', (event) => {
+        tapArea.on('pointertap', (event: FederatedMouseEvent) => {
             const x = Math.floor((event.globalX - dx - this.group.x) / gridSize)
             const y = Math.floor((event.globalY - dy - this.group.y) / gridSize)
-            console.log(`tap event: ${x} ${y}`)
-            const result = this.story.onGridTap(x, y)
-            if (result.isBreak()) {
-                // create break stars animotion
-                const breakPoint = result.ofBreakStar()
-                const anim: { x: number } = { x: 0 }
-                new Tween.Tween(anim)
-                    .to({ x: 1000 }, 1000)
-                    .easing(Tween.Easing.Quadratic.InOut)
-                    .onUpdate(() => {
-                        this.drawBreakStar(anim.x, breakPoint)
-                    })
-                    .onComplete(() => this.draw())
-                    .start()
-
-                console.log(`Tween start`)
-                // create moving stars animotion
-                const movingPoint = result.ofMovingStar()
-                const animMove: { x: number } = { x: 0 }
-                for (let i = 0; i < movingPoint.length; i++) {
-                    const element = movingPoint[i];
-                    element.startMove(animMove)
-                }
-                new Tween.Tween(animMove)
-                    .to({ x: 1000 }, 1000)
-                    .easing(Tween.Easing.Quadratic.InOut)
-                    .onUpdate(() => {
-                        this.drawMovingStar(anim.x, movingPoint)
-                    })
-                    .onComplete(() => {
-                        for (let i = 0; i < movingPoint.length; i++) {
-                            const element = movingPoint[i];
-                            element.endMove(animMove)
-                        }
-                        this.draw()
-                    })
-                    .start()
-
-                // draw static stars
-                this.draw()
-            }
+            this.onTap(x, y)
         })
         this.draw()
 
@@ -182,6 +143,59 @@ export class Board implements Widget {
         this.group.removeChild(this.scoreView)
         this.group.removeChild(this.levelView)
         this.group.removeChild(this.levelTargetView)
+    }
+
+    private clickable = true
+
+    private onTap(x: number, y: number) {
+        console.log(`tap event: ${x} ${y}`)
+        if (!this.clickable) {
+            return
+        }
+        const result = this.story.onGridTap(x, y)
+        if (!result.isBreak()) {
+            return
+        }
+        this.clickable = false
+        setTimeout(() => this.clickable = true, 1000);
+
+        // create break stars animotion
+        const breakPoint = result.ofBreakStar()
+        const anim: { x: number } = { x: 0 }
+        new Tween.Tween(anim)
+            .to({ x: 1000 }, UX.breakAnimDuration)
+            .easing(Tween.Easing.Quadratic.InOut)
+            .onUpdate(() => {
+                this.drawBreakStar(anim.x, breakPoint)
+            })
+            .onComplete(() => this.draw())
+            .start()
+
+        console.log(`Tween start`)
+        // create moving stars animotion
+        const movingPoint = result.ofMovingStar()
+        const animMove: { x: number } = { x: 0 }
+        for (let i = 0; i < movingPoint.length; i++) {
+            const element = movingPoint[i];
+            element.startMove(animMove)
+        }
+        new Tween.Tween(animMove)
+            .to({ x: 1000 }, UX.breakAnimDuration)
+            .easing(Tween.Easing.Quadratic.InOut)
+            .onUpdate(() => {
+                this.drawMovingStar(anim.x, movingPoint)
+            })
+            .onComplete(() => {
+                for (let i = 0; i < movingPoint.length; i++) {
+                    const element = movingPoint[i];
+                    element.endMove(animMove)
+                }
+                this.draw()
+            })
+            .start()
+
+        // draw static stars
+        this.draw()
     }
 
     private drawBreakStar(anim: number, breakPoint: BreakPoint) {

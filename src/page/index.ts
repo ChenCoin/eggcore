@@ -107,8 +107,10 @@ export class Index implements Story {
         if (result.isBreak()) {
             const isFinish = this.databus.checkIfFinish()
             if (isFinish[0]) {
-                this.databus.end()
-                this.onPageChanged(2)
+                setTimeout(() => {
+                    this.databus.end()
+                    this.onPageChanged(2)
+                }, UX.breakAnimDuration)
             }
         }
         return result

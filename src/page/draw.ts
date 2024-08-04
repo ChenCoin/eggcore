@@ -53,12 +53,17 @@ export class StarDrawer {
                 const x = this.extra + j * this.extraSize
                 const y = this.extra + i * this.extraSize + this.gridY
                 // rect: x, y, starSize, starSize
-                allStar.filters = []
                 allStar.filletRect(x, y, this.starSize, this.starSize, this.fillet)
                 allStar.fill(color[1])
 
                 const cx = this.extraElse + j * this.extraSize
                 const cy = this.extraElse + i * this.extraSize + this.gridY
+                this.drawStar(path, cx, cy + 2, this.outerR, this.innerR, 0)
+                allStar.path(path)
+                allStar.fill({
+                    color: 0x808080,
+                    alpha: 0.2,
+                })
                 this.drawStar(path, cx, cy, this.outerR, this.innerR, 0)
                 allStar.path(path)
                 allStar.fill(color[0])
@@ -77,7 +82,7 @@ export class StarDrawer {
         let color = UX.colorMap[colorIndex][0]
 
         const animNum = animValue / 1000
-        const alpha = 1 - 0.5 * animNum
+        const alpha = 1 - 0.8 * animNum
         for (let k = 0; k < list.length; k++) {
             const item = list[k]
             const size = item.length - 2
@@ -125,6 +130,12 @@ export class StarDrawer {
 
             const cx = this.extraElse + j * this.extraSize
             const cy = this.extraElse + i * this.extraSize + this.gridY
+            this.drawStar(path, cx, cy + 2, this.outerR, this.innerR, 0)
+            panel.path(path)
+            panel.fill({
+                color: 0x808080,
+                alpha: 0.2,
+            })
             this.drawStar(path, cx, cy, this.outerR, this.innerR, 0)
             panel.path(path)
             panel.fill(color[0])

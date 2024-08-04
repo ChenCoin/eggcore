@@ -3,9 +3,11 @@ import { DropShadowFilter } from "pixi-filters"
 import { Size } from "./page/size"
 import { FillInput, Graphics, Text } from "pixi.js"
 
-export const row = 10
+export const row: number = 10
 
 export const col: number = 10
+
+export const breakAnimDuration: number = 800
 
 export const themeColor = 0xFFC107
 
