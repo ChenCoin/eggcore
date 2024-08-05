@@ -7,7 +7,7 @@ export const row: number = 10
 
 export const col: number = 10
 
-export const breakAnimDuration: number = 800
+export const breakAnimDuration: number = 500
 
 export const themeColor = 0xFFC107
 
