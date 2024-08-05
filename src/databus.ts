@@ -32,8 +32,11 @@ export class Databus {
         this.level = 0
     }
 
-    public end() {
+    public end(lastCount: number = 10) {
         console.log(`data end`)
+        if (lastCount < 10) {
+            this.score += 2000 - 20 * lastCount * lastCount
+        }
         if (this.score >= this.currentLevelTarget()) {
             this.level += 1
             this.status = 3
