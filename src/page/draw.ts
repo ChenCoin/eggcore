@@ -107,13 +107,16 @@ export class StarDrawer {
         }
     }
 
-    public drawMovingStar(panel: PIXI.Graphics, anim: number,
+    public drawMovingStar(panel: PIXI.Graphics, anim: { x: number },
         movingPoint: Array<GridPoint>) {
         const path = new PIXI.GraphicsPath()
         const size = movingPoint.length
-        const animNum = anim / 1000
+        const animNum = anim.x / 1000
         for (let k = 0; k < size; k++) {
             const item = movingPoint[k]
+            if (!item.isThisMoveAnim(anim)) {
+                return
+            }
             let itemIndex = item.ofColor()
             if (itemIndex == 0) {
                 continue

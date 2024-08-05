@@ -90,6 +90,8 @@ export class Settlement implements Page {
         this.group.visible = false
     }
 
+    clearAnim(): void { }
+
     destory(): void {
         this.background.clear()
         this.nextBtn.removeFromView(this.group)

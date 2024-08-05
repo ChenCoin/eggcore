@@ -73,6 +73,8 @@ export class Background implements Page {
         this.panel.visible = true
     }
 
+    clearAnim(): void { }
+
     destory(): void {
         this.app.stage.removeChild(this.panel)
     }

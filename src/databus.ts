@@ -318,6 +318,10 @@ export class GridPoint {
         this.position = [this.dx, this.dy]
     }
 
+    public isThisMoveAnim(anim: { x: number }): boolean {
+        return this.anim == anim
+    }
+
     public isMoving(): boolean {
         return this.moving
     }

@@ -34,6 +34,10 @@ export class Board implements Widget {
 
     private starDrawer = new StarDrawer(this.cover)
 
+    private breakState: StateFlag = new StateFlag(false, { x: 0 })
+
+    private movingState: StateFlag = new StateFlag(false, { x: 0 })
+
     constructor(story: Story, group: PIXI.Container) {
         this.story = story
         this.group = group
@@ -145,6 +149,15 @@ export class Board implements Widget {
         this.group.removeChild(this.levelTargetView)
     }
 
+    public clearAnim(): void {
+        if (this.breakState.isRunning()) {
+            this.breakStarPanel.clear()
+        }
+        if (this.movingState.isRunning()) {
+            this.movingStarPanel.clear()
+        }
+    }
+
     private clickable = true
 
     private onTap(x: number, y: number) {
@@ -162,19 +175,24 @@ export class Board implements Widget {
         // create break stars animotion
         const breakPoint = result.ofBreakStar()
         const anim: { x: number } = { x: 0 }
+        this.breakState = new StateFlag(true, anim)
         new Tween.Tween(anim)
             .to({ x: 1000 }, UX.breakAnimDuration)
             .easing(Tween.Easing.Quadratic.InOut)
             .onUpdate(() => {
                 this.drawBreakStar(anim.x, breakPoint)
             })
-            .onComplete(() => this.draw())
+            .onComplete(() => {
+                this.breakState.endState(anim)
+                this.draw()
+            })
             .start()
 
         console.log(`Tween start`)
         // create moving stars animotion
         const movingPoint = result.ofMovingStar()
         const animMove: { x: number } = { x: 0 }
+        this.movingState = new StateFlag(true, animMove)
         for (let i = 0; i < movingPoint.length; i++) {
             const element = movingPoint[i];
             element.startMove(animMove)
@@ -183,9 +201,10 @@ export class Board implements Widget {
             .to({ x: 1000 }, UX.breakAnimDuration)
             .easing(Tween.Easing.Quadratic.InOut)
             .onUpdate(() => {
-                this.drawMovingStar(anim.x, movingPoint)
+                this.drawMovingStar(animMove, movingPoint)
             })
             .onComplete(() => {
+                this.movingState.endState(animMove)
                 for (let i = 0; i < movingPoint.length; i++) {
                     const element = movingPoint[i];
                     element.endMove(animMove)
@@ -199,12 +218,33 @@ export class Board implements Widget {
     }
 
     private drawBreakStar(anim: number, breakPoint: BreakPoint) {
-        this.breakStarPanel.clear()
+        // this.breakStarPanel.clear()
         this.starDrawer.drawBreakStar(this.breakStarPanel, anim, breakPoint)
     }
 
-    private drawMovingStar(anim: number, movingPoint: Array<GridPoint>) {
-        this.movingStarPanel.clear()
+    private drawMovingStar(anim: { x: number }, movingPoint: Array<GridPoint>) {
+        // this.movingStarPanel.clear()
         this.starDrawer.drawMovingStar(this.movingStarPanel, anim, movingPoint)
+    }
+}
+
+class StateFlag {
+    private running: boolean
+
+    private readonly flag: { x: number }
+
+    constructor(running: boolean, flag: { x: number }) {
+        this.running = running
+        this.flag = flag
+    }
+
+    public isRunning(): boolean {
+        return this.running
+    }
+
+    public endState(flag: { x: number }) {
+        if (flag == this.flag) {
+            this.running = false
+        }
     }
 }

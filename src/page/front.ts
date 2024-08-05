@@ -76,6 +76,8 @@ export class FrontPanel implements Page {
         this.group.visible = false
     }
 
+    clearAnim(): void { }
+
     destory(): void {
         // remove groups from app stage
         // groups to be null

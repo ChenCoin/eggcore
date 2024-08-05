@@ -67,6 +67,10 @@ export class ContentPanel implements Page {
         this.group.visible = false
     }
 
+    clearAnim(): void {
+        this.board.clearAnim()
+    }
+
     destory(): void {
         this.board.destory()
         this.endButton.clear()

@@ -14,4 +14,6 @@ export interface Page extends Widget {
     show(): void
 
     hide(): void
+
+    clearAnim(): void
 }

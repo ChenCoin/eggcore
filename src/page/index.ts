@@ -45,9 +45,12 @@ export class Index implements Story {
             autoDensity: true,
             backgroundColor: 0xABC3B6,
             resizeTo: window, // 大小为全屏
-            resolution: window.devicePixelRatio, // 适配缩放的分辨率
+            resolution: Math.ceil(window.devicePixelRatio), // 适配缩放的分辨率
         })
-        app.ticker.add((tick) => Tween.update(tick.lastTime))
+        app.ticker.add((tick) => {
+            this.lastPage.clearAnim()
+            Tween.update(tick.lastTime)
+        })
         document.body.appendChild(app.canvas)
 
         // load the fonts. todo zip the font to woff2
@@ -178,5 +181,6 @@ class NullPage implements Page {
     update(_x: number, _y: number): void { }
     show(): void { }
     hide(): void { }
+    clearAnim(): void { }
     destory(): void { }
 }
