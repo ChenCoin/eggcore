@@ -257,6 +257,7 @@ export class GridPoint {
 
     public randomInit() {
         this.moving = false
+        this.position = [this.dx, this.dy]
         this.value = Math.ceil(Math.random() * 5)
     }
 
@@ -271,7 +272,6 @@ export class GridPoint {
     public setPivot(dx: number, dy: number) {
         this.dx = dx
         this.dy = dy
-        this.position = [dx, dy]
     }
 
     public ofPosition(animNum: number): [number, number] {
