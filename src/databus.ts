@@ -293,8 +293,9 @@ export class GridPoint {
 
     public clone(other: GridPoint) {
         this.value = other.value
-        if (this.moving) {
-            this.position = this.checkoutPosition()
+        if (other.moving) {
+            this.position = this.checkoutPosition(other)
+            console.log(`position ${this.position[0]}, ${this.position[1]}`)
         } else {
             this.position = other.position
         }
@@ -326,10 +327,10 @@ export class GridPoint {
         return this.moving
     }
 
-    private checkoutPosition(): [number, number] {
-        const pos = this.position
-        const x = pos[0] + (this.dx - pos[0]) * this.anim.x / 1000
-        const y = pos[1] + (this.dy - pos[1]) * this.anim.x / 1000
+    private checkoutPosition(other: GridPoint): [number, number] {
+        const pos = other.position
+        const x = pos[0] + (other.dx - pos[0]) * other.anim.x / 1000
+        const y = pos[1] + (other.dy - pos[1]) * other.anim.x / 1000
         return [x, y]
     }
 }

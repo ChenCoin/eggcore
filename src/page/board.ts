@@ -158,19 +158,12 @@ export class Board implements Widget {
         }
     }
 
-    private clickable = true
-
     private onTap(x: number, y: number) {
         console.log(`tap event: ${x} ${y}`)
-        if (!this.clickable) {
-            return
-        }
         const result = this.story.onGridTap(x, y)
         if (!result.isBreak()) {
             return
         }
-        this.clickable = false
-        setTimeout(() => this.clickable = true, 1000);
 
         // create break stars animotion
         const breakPoint = result.ofBreakStar()
@@ -178,7 +171,7 @@ export class Board implements Widget {
         this.breakState = new StateFlag(true, anim)
         new Tween.Tween(anim)
             .to({ x: 1000 }, UX.breakAnimDuration)
-            .easing(Tween.Easing.Quadratic.InOut)
+            // .easing(Tween.Easing.Quadratic.InOut)
             .onUpdate(() => {
                 this.drawBreakStar(anim.x, breakPoint)
             })
@@ -199,7 +192,7 @@ export class Board implements Widget {
         }
         new Tween.Tween(animMove)
             .to({ x: 1000 }, UX.breakAnimDuration)
-            .easing(Tween.Easing.Quadratic.InOut)
+            // .easing(Tween.Easing.Quadratic.InOut)
             .onUpdate(() => {
                 this.drawMovingStar(animMove, movingPoint)
             })
