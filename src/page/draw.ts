@@ -115,7 +115,7 @@ export class StarDrawer {
         for (let k = 0; k < size; k++) {
             const item = movingPoint[k]
             if (!item.isThisMoveAnim(anim)) {
-                return
+                continue
             }
             let itemIndex = item.ofColor()
             if (itemIndex == 0) {
