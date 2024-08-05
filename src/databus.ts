@@ -27,15 +27,6 @@ export class Databus {
     public start() {
         console.log(`data start`)
         this.loopGrid((grid) => grid.randomInit())
-
-        this.allGrid[0][9].hook(4)
-        this.allGrid[1][9].hook(1)
-        this.allGrid[2][9].hook(1)
-        this.allGrid[3][9].hook(1)
-        this.allGrid[4][9].hook(1)
-
-        this.allGrid[3][8].hook(2)
-        this.allGrid[4][8].hook(2)
         this.score = 0
         this.status = 1
         this.level = 0
@@ -265,11 +256,8 @@ export class GridPoint {
     }
 
     public randomInit() {
+        this.moving = false
         this.value = Math.ceil(Math.random() * 5)
-    }
-
-    public hook(value: number) {
-        this.value = value
     }
 
     public ofColor(): number {

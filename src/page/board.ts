@@ -38,6 +38,8 @@ export class Board implements Widget {
 
     private movingState: StateFlag = new StateFlag(false, { x: 0 })
 
+    private animCache = new Set<Tween.Tween<{ x: number }>>()
+
     constructor(story: Story, group: PIXI.Container) {
         this.story = story
         this.group = group
@@ -136,6 +138,8 @@ export class Board implements Widget {
     }
 
     destory(): void {
+        this.animCache.forEach((item) => item.stop())
+        this.animCache.clear()
         this.tapArea.clear()
         this.allStar.clear()
         this.breakStarPanel.clear()
@@ -169,17 +173,19 @@ export class Board implements Widget {
         const breakPoint = result.ofBreakStar()
         const anim: { x: number } = { x: 0 }
         this.breakState = new StateFlag(true, anim)
-        new Tween.Tween(anim)
+        const breakTween = new Tween.Tween(anim)
             .to({ x: 1000 }, UX.breakAnimDuration)
             // .easing(Tween.Easing.Quadratic.InOut)
             .onUpdate(() => {
                 this.drawBreakStar(anim.x, breakPoint)
             })
             .onComplete(() => {
+                this.animCache.delete(breakTween)
                 this.breakState.endState(anim)
                 this.draw()
             })
             .start()
+        this.animCache.add(breakTween)
 
         console.log(`Tween start`)
         // create moving stars animotion
@@ -190,13 +196,14 @@ export class Board implements Widget {
             const element = movingPoint[i];
             element.startMove(animMove)
         }
-        new Tween.Tween(animMove)
+        const moveTween = new Tween.Tween(animMove)
             .to({ x: 1000 }, UX.breakAnimDuration)
             // .easing(Tween.Easing.Quadratic.InOut)
             .onUpdate(() => {
                 this.drawMovingStar(animMove, movingPoint)
             })
             .onComplete(() => {
+                this.animCache.delete(moveTween)
                 this.movingState.endState(animMove)
                 for (let i = 0; i < movingPoint.length; i++) {
                     const element = movingPoint[i];
@@ -205,6 +212,7 @@ export class Board implements Widget {
                 this.draw()
             })
             .start()
+        this.animCache.add(moveTween)
 
         // draw static stars
         this.draw()
