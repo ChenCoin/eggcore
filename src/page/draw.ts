@@ -18,6 +18,9 @@ export class StarDrawer {
     private readonly extraSize
     private readonly extra
     private readonly extraElse
+
+    private readonly path = new PIXI.GraphicsPath()
+
     constructor(cover: Cover) {
         this.gridY = cover.gridY
         this.strokeSize = cover.strokeSize
@@ -37,7 +40,7 @@ export class StarDrawer {
     }
 
     public draw(allStar: PIXI.Graphics, allGrid: Array<Array<GridPoint>>) {
-        const path = new PIXI.GraphicsPath()
+        const path = this.path
         for (let i = 0; i < UX.row; i++) {
             for (let j = 0; j < UX.col; j++) {
                 const item = allGrid[i][j]
@@ -58,11 +61,11 @@ export class StarDrawer {
 
                 const cx = this.extraElse + j * this.extraSize
                 const cy = this.extraElse + i * this.extraSize + this.gridY
-                this.drawStar(path, cx, cy + 2, this.outerR, this.innerR, 0)
+                this.drawStar(path, cx, cy + 3, this.outerR, this.innerR, 0)
                 allStar.path(path)
                 allStar.fill({
                     color: 0x808080,
-                    alpha: 0.2,
+                    alpha: 0.3,
                 })
                 this.drawStar(path, cx, cy, this.outerR, this.innerR, 0)
                 allStar.path(path)
@@ -73,7 +76,7 @@ export class StarDrawer {
 
     public drawBreakStar(panel: PIXI.Graphics, animValue: number,
         breakPoint: BreakPoint) {
-        const path = new PIXI.GraphicsPath()
+        const path = this.path
         const list = breakPoint.ofList()
         let colorIndex = breakPoint.ofColor()
         if (colorIndex == 0) {
@@ -109,7 +112,7 @@ export class StarDrawer {
 
     public drawMovingStar(panel: PIXI.Graphics, anim: { x: number },
         movingPoint: Array<GridPoint>) {
-        const path = new PIXI.GraphicsPath()
+        const path = this.path
         const size = movingPoint.length
         const animNum = anim.x / 1000
         for (let k = 0; k < size; k++) {
