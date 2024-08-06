@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js'
 import * as Tween from '@tweenjs/tween.js'
 import * as UX from '../ux';
-import { BreakPoint, GridPoint } from '../databus';
+import { BreakPoint, GridPoint, TapEventResult } from '../databus';
 import { Cover } from './cover';
 import { Widget } from "./page";
 import { Scaffold } from "./scaffold";
@@ -39,6 +39,8 @@ export class Board implements Widget {
     private movingState: StateFlag = new StateFlag(false, { x: 0 })
 
     private animCache = new Set<Tween.Tween<{ x: number }>>()
+
+    private onTapEvent = (e: TapEventResult) => this.onTap(e)
 
     constructor(story: Story, group: PIXI.Container) {
         this.story = story
@@ -78,7 +80,7 @@ export class Board implements Widget {
         tapArea.on('pointertap', (event: FederatedMouseEvent) => {
             const x = Math.floor((event.globalX - dx - this.group.x) / gridSize)
             const y = Math.floor((event.globalY - dy - this.group.y) / gridSize)
-            this.onTap(x, y)
+            this.story.onGridTap(x, y, this.onTapEvent)
         })
         this.draw()
 
@@ -162,13 +164,7 @@ export class Board implements Widget {
         }
     }
 
-    private onTap(x: number, y: number) {
-        console.log(`tap event: ${x} ${y}`)
-        const result = this.story.onGridTap(x, y)
-        if (!result.isBreak()) {
-            return
-        }
-
+    private onTap(result: TapEventResult) {
         // create break stars animotion
         const breakPoint = result.ofBreakStar()
         const anim: { x: number } = { x: 0 }

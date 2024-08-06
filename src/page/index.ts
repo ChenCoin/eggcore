@@ -105,18 +105,12 @@ export class Index implements Story {
         this.onPageChanged(0)
     }
 
-    public onGridTap(x: number, y: number): TapEventResult {
+    public onGridTap(x: number, y: number, event: (e: TapEventResult) => void) {
         let result = this.databus.onGridTap(x, y)
         if (result.isBreak()) {
-            const isFinish = this.databus.checkIfFinish()
-            if (isFinish[0]) {
-                setTimeout(() => {
-                    this.databus.end(isFinish[1])
-                    this.onPageChanged(2)
-                }, UX.breakAnimDuration)
-            }
+            event(result)
+            setTimeout(() => this.checkIfGameOver(UX.breakAnimDuration / 2))
         }
-        return result
     }
 
     public toNextLevel(): void {
@@ -127,6 +121,16 @@ export class Index implements Story {
     public toHomePage(): void {
         console.log(`temp toHomePage`)
         this.onPageChanged(0)
+    }
+
+    private checkIfGameOver(delay: number) {
+        const isFinish = this.databus.checkIfFinish()
+        if (isFinish[0]) {
+            setTimeout(() => {
+                this.databus.end(isFinish[1])
+                this.onPageChanged(2)
+            }, UX.breakAnimDuration - delay)
+        }
     }
 
     private showOnStatus(): Page {

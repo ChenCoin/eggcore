@@ -12,7 +12,7 @@ export interface Story {
 
     onGameEnd(): void
 
-    onGridTap(x: number, y: number): TapEventResult
+    onGridTap(x: number, y: number, event: (e: TapEventResult) => void): void
 
     toNextLevel(): void
 
