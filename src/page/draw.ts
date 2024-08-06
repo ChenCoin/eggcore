@@ -78,11 +78,11 @@ export class StarDrawer {
         breakPoint: BreakPoint) {
         const path = this.path
         const list = breakPoint.ofList()
-        let colorIndex = breakPoint.ofColor()
+        const colorIndex = breakPoint.ofColor()
         if (colorIndex == 0) {
             return
         }
-        let color = UX.colorMap[colorIndex][0]
+        const color = UX.colorMap[colorIndex][0]
 
         const animNum = animValue / 1000
         const alpha = 1 - 0.8 * animNum
@@ -94,6 +94,38 @@ export class StarDrawer {
             for (let index = 0; index < size; index++) {
                 // rect: x, y, starSize, starSize
                 const radius = item[index + 2]
+
+                const rx = 100 * animNum * Math.sin(radius * 2 * Math.PI)
+                const ry = 100 * animNum * Math.cos(radius * 2 * Math.PI)
+                const rz = 360 * animNum
+                const cx = this.extraElse + j * this.extraSize + rx
+                const cy = this.extraElse + i * this.extraSize + this.gridY + ry
+                this.drawStar(path, cx, cy, this.outerR, this.innerR, rz)
+                panel.path(path)
+                panel.fill({
+                    color: color,
+                    alpha: alpha,
+                })
+            }
+        }
+    }
+
+    public drawBreaAllkStar(panel: PIXI.Graphics, animValue: number,
+        allLastStar: Array<Array<number>>) {
+        const path = this.path
+
+        const animNum = animValue / 1000
+        const alpha = 1 - 0.2 * animNum
+        for (let k = 0; k < allLastStar.length; k++) {
+            const item = allLastStar[k]
+            const color = UX.colorMap[item[0]][0]
+
+            const size = item.length - 3
+            const i = item[1]
+            const j = item[2]
+            for (let index = 0; index < size; index++) {
+                // rect: x, y, starSize, starSize
+                const radius = item[index + 3]
 
                 const rx = 100 * animNum * Math.sin(radius * 2 * Math.PI)
                 const ry = 100 * animNum * Math.cos(radius * 2 * Math.PI)

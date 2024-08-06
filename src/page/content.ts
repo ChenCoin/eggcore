@@ -87,7 +87,7 @@ export class ContentPanel implements Page {
         const button = this.endButton
         button.clear()
 
-        const buttonSize = cover.starSize / 2
+        const size = cover.starSize * 4 / 5
         const bgrColor = isPress ? UX.themeColorPressed : UX.themeColor
         if (isPress) {
             button.filters = UX.shadowPressed()
@@ -95,9 +95,9 @@ export class ContentPanel implements Page {
             button.filters = UX.shadowDefault()
         }
         // UX.drawButton(button, btnSize, btnRound, bgrColor)
-        button.circle(x + buttonSize, y + buttonSize, buttonSize).fill(bgrColor)
+        button.filletRect(x, y, size, size, size / 4).fill(bgrColor)
 
-        const stickRound = buttonSize / 5
+        const stickRound = size / 10
         const x1 = x + stickRound * 2.5
         const x2 = x + stickRound * 5.5
         const y0 = y + stickRound * 2 - 0.5

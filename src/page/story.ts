@@ -1,5 +1,6 @@
 import { Application } from "pixi.js"
-import { Databus, TapEventResult } from "../databus"
+import { Beater } from "./beater"
+import { Databus } from "../databus"
 
 export interface Story {
     ofApp(): Application
@@ -12,7 +13,7 @@ export interface Story {
 
     onGameEnd(): void
 
-    onGridTap(x: number, y: number, event: (e: TapEventResult) => void): void
+    onGridTap(x: number, y: number, beater: Beater): void
 
     toNextLevel(): void
 

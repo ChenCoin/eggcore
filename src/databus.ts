@@ -95,10 +95,7 @@ export class Databus {
         // break the grid with same color
         console.log(`total: ${sameColorGrids.length}`)
         const theColor = theGrid.ofColor()
-        sameColorGrids.forEach(pos => {
-            console.log(`grid ${pos[0]} ${pos[1]}`)
-            this.allGrid[pos[0]][pos[1]].clear()
-        })
+        sameColorGrids.forEach(pos => this.allGrid[pos[0]][pos[1]].clear())
         const movingGrids = this.checkoutMovingStar()
         // 统计分数
         const gridCount = sameColorGrids.length

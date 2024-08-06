@@ -1,8 +1,9 @@
 import * as PIXI from 'pixi.js'
 import * as Tween from '@tweenjs/tween.js'
 import * as UX from '../ux'
+import { Beater } from './beater'
 import { ContentPanel } from './content'
-import { Databus, TapEventResult } from '../databus'
+import { Databus } from '../databus'
 import { FrontPanel } from './front'
 import { Page } from './page'
 import { Scaffold } from './scaffold'
@@ -105,11 +106,12 @@ export class Index implements Story {
         this.onPageChanged(0)
     }
 
-    public onGridTap(x: number, y: number, event: (e: TapEventResult) => void) {
+    public onGridTap(x: number, y: number, beater: Beater) {
         let result = this.databus.onGridTap(x, y)
         if (result.isBreak()) {
-            event(result)
-            setTimeout(() => this.checkIfGameOver(UX.breakAnimDuration / 2))
+            beater.breakTapStar(result)
+            const delay = UX.breakAnimDuration / 2
+            setTimeout(() => this.checkIfGameOver(beater), delay)
         }
     }
 
@@ -123,13 +125,17 @@ export class Index implements Story {
         this.onPageChanged(0)
     }
 
-    private checkIfGameOver(delay: number) {
+    private checkIfGameOver(beater: Beater) {
         const isFinish = this.databus.checkIfFinish()
         if (isFinish[0]) {
             setTimeout(() => {
-                this.databus.end(isFinish[1])
-                this.onPageChanged(2)
-            }, UX.breakAnimDuration - delay)
+                beater.breakAllStar()
+                // 这里延迟动画时间 + 1
+                setTimeout(() => {
+                    this.databus.end(isFinish[1])
+                    this.onPageChanged(2)
+                }, UX.breakAnimDuration * 3)
+            }, UX.breakAnimDuration)
         }
     }
 

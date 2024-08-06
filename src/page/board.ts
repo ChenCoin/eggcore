@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js'
 import * as Tween from '@tweenjs/tween.js'
 import * as UX from '../ux';
+import { Beater } from './beater';
 import { BreakPoint, GridPoint, TapEventResult } from '../databus';
 import { Cover } from './cover';
 import { Widget } from "./page";
@@ -9,7 +10,7 @@ import { Story } from './story';
 import { StarDrawer } from './draw';
 import { FederatedMouseEvent } from 'pixi.js';
 
-export class Board implements Widget {
+export class Board implements Widget, Beater {
     private story: Story
 
     private group: PIXI.Container
@@ -39,8 +40,6 @@ export class Board implements Widget {
     private movingState: StateFlag = new StateFlag(false, { x: 0 })
 
     private animCache = new Set<Tween.Tween<{ x: number }>>()
-
-    private onTapEvent = (e: TapEventResult) => this.onTap(e)
 
     constructor(story: Story, group: PIXI.Container) {
         this.story = story
@@ -80,7 +79,7 @@ export class Board implements Widget {
         tapArea.on('pointertap', (event: FederatedMouseEvent) => {
             const x = Math.floor((event.globalX - dx - this.group.x) / gridSize)
             const y = Math.floor((event.globalY - dy - this.group.y) / gridSize)
-            this.story.onGridTap(x, y, this.onTapEvent)
+            this.story.onGridTap(x, y, this)
         })
         this.draw()
 
@@ -164,7 +163,7 @@ export class Board implements Widget {
         }
     }
 
-    private onTap(result: TapEventResult) {
+    public breakTapStar(result: TapEventResult) {
         // create break stars animotion
         const breakPoint = result.ofBreakStar()
         const anim: { x: number } = { x: 0 }
@@ -214,14 +213,50 @@ export class Board implements Widget {
         this.draw()
     }
 
+    public breakAllStar(): void {
+        const allGrid = this.story.ofData().ofGrids()
+        const list = new Array<Array<number>>()
+        for (let i = 0; i < UX.row; i++) {
+            for (let j = 0; j < UX.col; j++) {
+                const item = allGrid[i][j]
+                if (item.isEmpty()) {
+                    continue
+                }
+                const pivot = item.getPivot()
+                const itemList = new Array<number>()
+                itemList.push(item.ofColor(), pivot[1], pivot[0])
+                itemList.push(Math.random())
+                itemList.push(Math.random())
+                list.push(itemList)
+                item.clear()
+            }
+        }
+
+        const anim: { x: number } = { x: 0 }
+        this.breakState = new StateFlag(true, anim)
+        const breakTween = new Tween.Tween(anim)
+            .to({ x: 1000 }, UX.breakAnimDuration * 2)
+            .onUpdate(() => this.drawBreakAllStar(anim.x, list))
+            .onComplete(() => {
+                this.animCache.delete(breakTween)
+                this.breakState.endState(anim)
+                this.draw()
+            })
+            .start()
+        this.animCache.add(breakTween)
+        this.draw()
+    }
+
     private drawBreakStar(anim: number, breakPoint: BreakPoint) {
-        // this.breakStarPanel.clear()
         this.starDrawer.drawBreakStar(this.breakStarPanel, anim, breakPoint)
     }
 
     private drawMovingStar(anim: { x: number }, movingPoint: Array<GridPoint>) {
-        // this.movingStarPanel.clear()
         this.starDrawer.drawMovingStar(this.movingStarPanel, anim, movingPoint)
+    }
+
+    private drawBreakAllStar(anim: number, list: Array<Array<number>>) {
+        this.starDrawer.drawBreaAllkStar(this.breakStarPanel, anim, list)
     }
 }
 

@@ -28,7 +28,7 @@ export const colorMap: Array<[number, number]> = [
     [0x57D68C, 0x53BE80], // green
 ]
 
-export const version = 'version 1.6.0'
+export const version = 'version 1.6.1'
 
 export const title = '星星王国'
 
